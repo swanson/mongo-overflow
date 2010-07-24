@@ -13,10 +13,19 @@ def index(request):
                 It's like StackOverflow, but worse!
                 <ul>"""
     for question in questions:
+        html += "<a href='/questions/" + str(question.id) + "' >"
         html += '<li>'
         html += question.title + ' -- Asked by: ' + question.author.name
         html += ' -- %s Answer(s)' % (len(question.answers))
-        html += '</li>'
+        html += '</li></a>'
+    html += '</ul>'
+    return HttpResponse(html)
+
+def question_details(request, qid):
+    question = Question.objects.get(id = qid)
+    html = '<h1>%s</h1><ul>' % question.title
+    for answer in question.answers:
+        html += '<li>%s (Posted by %s) </li>' % (answer.body, answer.author.name)
     html += '</ul>'
     return HttpResponse(html)
 
