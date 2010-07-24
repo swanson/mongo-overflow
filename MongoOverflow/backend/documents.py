@@ -25,8 +25,8 @@ class Question(Document):
     score = IntField(required = True, default = 0)
     created = DateTimeField(required = True, default = datetime.now)
     views = IntField(required = True, default = 0)
-    comments = ListField(ReferenceField(Comment), default = [])
-    answers = ListField(ReferenceField(Answer), default = [])
+    comments = ListField(ReferenceField(Comment), default = lambda : [])
+    answers = ListField(ReferenceField(Answer), default = lambda : [])
     tags = ListField(StringField(max_length = 50))
     author = ReferenceField(User)
 
@@ -49,6 +49,10 @@ if __name__ == '__main__':
 
     q.answers.append(a)
     q.save()
+
+    q2 = Question(title = 'Another Question', body = 'It seems neat. Is it?', \
+                tags = ['django', 'python'], author = jon_f)
+    q2.save()
 
     my_question = Question.objects()[0]
     
