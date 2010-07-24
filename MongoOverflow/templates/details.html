@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div id='question'>
+    <table>
+    <tbody>
+        <tr>
+            <h2>{{ question.title }}</h2>
+            {{ question.body }} <br />
+            By: {{ question.author.name }}
+        </tr>
+        <tr><ul>
+            {% for comment in question.comments %}
+            {{ comment.body }} - {{ comment.author.name }} @
+            {{ comment.created|date:"h:m M d Y" }}
+            {% endfor %}
+        </ul></tr>
+    </tbody>
+    </table>
+</div>
+
+<h3>{{ question.answers|length }} Answer(s)</h3>
+<div id='answers'>
+    {% for answer in question.answers %}
+    <table>
+    <tbody>
+        <tr>
+            {{ answer.body }} <br />
+            By: {{ answer.author.name }} @ {{ answer.created|date:"h:m M d Y" }}
+        </tr>
+        <tr><ul>
+            {% for comment in answer.comments %}
+                {{ comment.body }} - {{ comment.author.name }} {{ comment.created }}
+            {% endfor %}
+        </ul></tr>
+    </tbody>
+    </table>
+    {% endfor %}
+</div>
+</div>
+{% endblock %}
