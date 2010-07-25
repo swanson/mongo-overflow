@@ -14,13 +14,25 @@
             {% endif %}
             <br />
             By: {{ question.author.name }} @ {{ question.created|date:"jS F Y H:i" }}
-            <ul class="comment">
+            <ul>
             {% for comment in question.comments %}
                 <li class="comment">
                 {{ comment.body }} - {{ comment.author.name }} @
                 {{ comment.created|date:"jS F Y H:i" }} </li>
             {% endfor %}
-            </ul>
+            <li class="comment">
+            <div class="form-submit-small" style="float:left;">
+                <form action="" method="post" style="float:left; width:100%;">
+                {{ comment_form }}
+                    <input type="submit" value="Add a comment" 
+                    style="background-color:#5AAF4B; color:#ffffff;
+font-size:80%; padding-top:2px;"/>
+                </form>
+            </div>  
+            </li>
+        </ul>
+        <br />
+        <br />
 </div>
 
 <h3>{{ question.answers|length }} Answer(s)</h3>
@@ -39,12 +51,10 @@
 </div>
 <h3>Your Answer</h3>
 <form action="" method="post">
-    <table>
-        {{ form.as_table }}
-        <tr>
-            <th></th><td><input type="submit" value="Post an Answer" /></td>
-        </tr>
-    </table>
+    {{ answer_form }}
+    <div class="form-submit">
+        <input type="submit" value="Post an Answer" style="display:block;"/>
+    </div>
 </form>
 
 </div>

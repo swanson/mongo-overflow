@@ -2,7 +2,6 @@ ul
 {
     padding:0;
     margin:0;
-    font-family: arial, helvetica, sans-serif;
     list-style-position: outside;
     list-style-type: none;
 }
@@ -99,4 +98,60 @@ a:hover.post-tag {
     padding-top:3px;
     text-decoration:none;
     white-space:nowrap;
+}
+
+li.comment {
+    font-size:80%;
+    padding-left:15px;
+    border-top-color:#DDDDDD;
+    border-top-style:dashed;
+    border-top-width:1px
+}
+
+.form-submit input {
+    border-bottom-color:#888888;
+    border-bottom-style:solid;
+    border-bottom-width:1px;
+    border-left-color:#888888;
+    border-left-style:solid;
+    border-left-width:1px;
+    border-right-color:#888888;
+    border-right-style:solid;
+    border-right-width:1px;
+    border-top-color:#888888;
+    border-top-style:solid;
+    border-top-width:1px;
+    font-weight:bold;
+    margin-bottom:3px;
+    margin-right:3px;
+    margin-top:3px;
+    padding-bottom:5px;
+    padding-left:5px;
+    padding-right:5px;
+    padding-top:5px;
+    background-color:#5AAF4B;
+    color:#ffffff;
+}
+
+.form-submit-small input {
+    border-bottom-color:#888888;
+    border-bottom-style:solid;
+    border-bottom-width:1px;
+    border-left-color:#888888;
+    border-left-style:solid;
+    border-left-width:1px;
+    border-right-color:#888888;
+    border-right-style:solid;
+    border-right-width:1px;
+    border-top-color:#888888;
+    border-top-style:solid;
+    border-top-width:1px;
+    margin-bottom:3px;
+    margin-right:3px;
+    margin-top:3px;
+    margin-left:2px;
+    padding-bottom:2px;
+    padding-left:2px;
+    padding-right:2px;
+    padding-top:1px;
 }

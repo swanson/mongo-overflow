@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.conf import settings
 
-from backend.documents import Question, User, Answer
+from backend.documents import Question, User, Answer, Comment
 from datetime import datetime
 
 def index(request):
@@ -17,22 +17,35 @@ def index(request):
 
 def question_details(request, qid):
     question = Question.objects.get(id = qid)
+    answer_form = Answer.Form()
+    comment_form = Comment.Form()
     if request.method == 'POST': #new answer submitted
-        form = Answer.Form(request.POST)
-        if form.is_valid():
-            body = form.cleaned_data['body']
-            new_answer = Answer(body = body,
-                    author = User.objects.get(name='matt'))
-            new_answer.save()
-            question.answers.append(new_answer)
-            question.save()
-            form = Answer.Form()
-    else:
-        form = Answer.Form()
+        if 'comment_body' in request.POST:
+            comment_form = Comment.Form(request.POST)
+            if comment_form.is_valid():
+                body = comment_form.cleaned_data['comment_body']
+                new_comment = Comment(body = body, 
+                        author = User.objects.get(name='matt'))
+                new_comment.save()
+                question.comments.append(new_comment)
+                question.save()
+                comment_form = Comment.Form()
+        else:
+            answer_form = Answer.Form(request.POST)
+            if answer_form.is_valid():
+                body = answer_form.cleaned_data['body']
+                new_answer = Answer(body = body,
+                        author = User.objects.get(name='matt'))
+                new_answer.save()
+                question.answers.append(new_answer)
+                question.save()
+                answer_form = Answer.Form()
+    
     context = {
                 'question': question,
                 'title': Question.objects.get(id = qid).title,
-                'form': form,
+                'comment_form': comment_form,
+                'answer_form': answer_form,
               }
     return render_to_response('details.html', context)
 

@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import *
-from views.core import *
+from views.core import index, add_question, unanswered, question_details
 
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin

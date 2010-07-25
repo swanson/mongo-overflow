@@ -18,13 +18,14 @@ class Response(Document):
     author = ReferenceField(User)
 
 class Comment(Response):
-    pass
+    class Form(forms.Form):
+        comment_body = forms.CharField(label = '')
 
 class Answer(Response):
     comments = ListField(ReferenceField(Comment))
 
     class Form(forms.Form):
-        body = forms.CharField(widget=forms.Textarea)
+        body = forms.CharField(widget = forms.Textarea, label = '')
 
 class Question(Document):
     #oid = StringField(required = True, default = uuid4)
