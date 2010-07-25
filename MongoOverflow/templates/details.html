@@ -33,5 +33,15 @@
             </ul>
     {% endfor %}
 </div>
+<h3>Your Answer</h3>
+<form action="" method="post">
+    <table>
+        {{ form.as_table }}
+        <tr>
+            <th></th><td><input type="submit" value="Post an Answer" /></td>
+        </tr>
+    </table>
+</form>
+
 </div>
 {% endblock %}

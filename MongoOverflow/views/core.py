@@ -16,9 +16,23 @@ def index(request):
     return render_to_response('index.html', context)
 
 def question_details(request, qid):
+    question = Question.objects.get(id = qid)
+    if request.method == 'POST': #new answer submitted
+        form = Answer.Form(request.POST)
+        if form.is_valid():
+            body = form.cleaned_data['body']
+            new_answer = Answer(body = body,
+                    author = User.objects.get(name='matt'))
+            new_answer.save()
+            question.answers.append(new_answer)
+            question.save()
+            form = Answer.Form()
+    else:
+        form = Answer.Form()
     context = {
-                'question': Question.objects.get(id = qid),
+                'question': question,
                 'title': Question.objects.get(id = qid).title,
+                'form': form,
               }
     return render_to_response('details.html', context)
 

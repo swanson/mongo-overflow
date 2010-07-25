@@ -23,6 +23,9 @@ class Comment(Response):
 class Answer(Response):
     comments = ListField(ReferenceField(Comment))
 
+    class Form(forms.Form):
+        body = forms.CharField(widget=forms.Textarea)
+
 class Question(Document):
     #oid = StringField(required = True, default = uuid4)
     title = StringField(required = True)
