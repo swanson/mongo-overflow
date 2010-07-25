@@ -1,23 +1,40 @@
+<!doctype html public '-//W3C//DTD HTML 4.01//EN'
+  'http://www.w3.org/TR/html4/strict.dtd'>
+<html>
+  <head>
+    <title>Document title</title>
+    <link rel="stylesheet" href="/media/Steely.css" type="text/css">
+    <link rel="stylesheet" href="/media/styles.css" type="text/css">
+  </head>
 <body>
-    <div class="container">
-        <div id="header">
-            <div id="logo">
+    <div class="container" style="width:1050px;margin-left:auto;margin-right:auto; margin-top:0; margin-bottom:0;">
+        <div id="header" style="float:left; width:100%; border-bottom-width: 1px; border-bottom-color:black; border-bottom-style:solid;height:130px;">
+            <div id="logo" style="float:left; width:350px;">
                 <h1>Mongo Overflow</h1>
                 It's like StackOverflow, but worse!                
             </div>
-            <div id="menu">
-                <ul>
-                </ul>
+            <div id="menu" style="float:left; width:695px; padding-left: 5px; padding-top:80px;">
+                <div style="float:left; margin:auto;">
+                    <ul>
+                        <li><a href='/questions/'>questions</a>
+                        <li><a href='/questions/'>tags</a>
+                        <li><a href='/questions/'>users</a>
+                        <li><a href='/questions/'>unanswered</a>
+                    </ul>
+                </div>
+                <div style="float:right; margin:auto;">
+                    <ul>
+                        <li><a href='/questions/'>ask a question</a>
+                    </ul>
+                </div>
             </div>
         </div>
-        <hr>
-        <div id="content">
+        <div id="content" style="min-height:450px;">
             {% block content %}{% endblock %}
         </div>
     </div>
-    <hr>
-    <div id="footer">
+    <div id="footer" style="width:1050px; margin: 0pt auto; border-top-width: 1px; border-top-color:black; border-top-style:solid; text-align: center; font-size:75%;">
         Created with mongoDB, MongoEngine, Django, and the magic of Python!
     </div>
-
 </body>
+</html>

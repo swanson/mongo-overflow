@@ -1,13 +1,16 @@
 from mongoengine import * #tsk tsk...what would PEP say?!
 from datetime import datetime
+#from uuid import uuid4
 
 class User(Document):
+    #oid = StringField(default = uuid4)
     name = StringField(required = True)
     email = StringField()
     avatar = URLField()
     rep = IntField(required = True, default = 0)
 
 class Response(Document):
+    #oid = StringField(required = True, default = uuid4)
     body = StringField(required = True)
     score = IntField(required = True, default = 0)
     created = DateTimeField(required = True, default = datetime.now)
@@ -20,6 +23,7 @@ class Answer(Response):
     comments = ListField(ReferenceField(Comment))
 
 class Question(Document):
+    #oid = StringField(required = True, default = uuid4)
     title = StringField(required = True)
     body = StringField(required = True)
     score = IntField(required = True, default = 0)
@@ -46,11 +50,14 @@ if __name__ == '__main__':
 
     a = Answer(body = 'It\'s awesome, for realz', author = jon_f)
     a.save()
+    c = Comment(body = 'Possible dup', author = jon_f)
+    c.save()
 
     q.answers.append(a)
+    q.comments.append(c)
     q.save()
 
-    q2 = Question(title = 'Another Question', body = 'It seems neat. Is it?', \
+    q2 = Question(title = 'Another Question', body = 'Why is Python so cool?', \
                 tags = ['django', 'python'], author = jon_f)
     q2.save()
 
