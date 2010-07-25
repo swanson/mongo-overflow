@@ -252,7 +252,6 @@ acronym	{
 		
 h1, h2, h3, h4, h5, h6, dt, th, thead, tfoot	{	
 	color:	#036;
-	background:	white;
 	}	
 		
 hr	{	
@@ -331,8 +330,8 @@ body	{
 	}	
 		
 div > p:first-child, body > p:first-child, td > p:first-child	{	
-	margin-top:	.75em;
-	margin-bottom:	.75em;
+	margin-top:	0;
+	margin-bottom:	0;
 	padding-top:	0;
 	padding-bottom:	0;
 	border-top:	0;
@@ -340,8 +339,8 @@ div > p:first-child, body > p:first-child, td > p:first-child	{
 	}	
 		
 h1 + p, h2 + p, h3 + p, h4 + p, h5 + p, h6 + p, div + p, p.initial	{	
-	margin-top:	.75em;
-	margin-bottom:	.75em;
+	margin-top:	0;
+	margin-bottom:	0;
 	padding-top:	0;
 	padding-bottom:	0;
 	border-top:	0;
@@ -353,8 +352,8 @@ h1, h2, h3, h4, h5, h6	{
 	}	
 		
 h1	{	
-	margin-top:	1.33em;
-	margin-bottom:	.33em;
+	margin-top:	0;
+	margin-bottom:	0;
 	padding-top:	0;
 	padding-bottom:	0;
 	border-top:	0;
@@ -795,10 +794,10 @@ caption	{
 	/* begin body box */	/* 1 - 'em-based symmetric a' */
 
 body	{
-	margin-top:	1.58em;
-	margin-left:	1.58em;
-	margin-right:	1ex;
-	margin-bottom:	1.58em;
+	margin-top:	0;
+	margin-left:	0;
+	margin-right:	0;
+	margin-bottom:	0;
 	padding-top:	0;
 	padding-left:	0;
 	padding-right:	0;

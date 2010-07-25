@@ -1,40 +1,36 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div style="float:left; width: 100%;">
 <div id='question'>
-    <table>
-    <tbody>
-        <tr>
             <h2>{{ question.title }}</h2>
             {{ question.body }} <br />
-            By: {{ question.author.name }}
-        </tr>
-        <tr><ul>
-            {% for comment in question.comments %}
-            {{ comment.body }} - {{ comment.author.name }} @
-            {{ comment.created|date:"h:m M d Y" }}
+            {% for tag in question.tags %}
+                {{ tag }}, 
             {% endfor %}
-        </ul></tr>
-    </tbody>
-    </table>
+            <br />
+            By: {{ question.author.name }} @ {{ question.created|date:"jS F Y H:i" }}
+            <ul class="comment">
+            {% for comment in question.comments %}
+                <li class="comment">
+                {{ comment.body }} - {{ comment.author.name }} @
+                {{ comment.created|date:"jS F Y H:i" }} </li>
+            {% endfor %}
+            </ul>
 </div>
 
 <h3>{{ question.answers|length }} Answer(s)</h3>
 <div id='answers'>
     {% for answer in question.answers %}
-    <table>
-    <tbody>
-        <tr>
             {{ answer.body }} <br />
-            By: {{ answer.author.name }} @ {{ answer.created|date:"h:m M d Y" }}
-        </tr>
-        <tr><ul>
+            By: {{ answer.author.name }} @ {{ answer.created|date:"jS F Y H:i" }}
+                        <ul class="comment">
             {% for comment in answer.comments %}
-                {{ comment.body }} - {{ comment.author.name }} {{ comment.created }}
+                <li class="comment">
+                {{ comment.body }} - {{ comment.author.name }} @
+                {{ comment.created|date:"jS F Y H:i" }} </li>
             {% endfor %}
-        </ul></tr>
-    </tbody>
-    </table>
+            </ul>
     {% endfor %}
 </div>
 </div>

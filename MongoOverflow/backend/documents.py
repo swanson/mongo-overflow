@@ -1,6 +1,7 @@
 from mongoengine import * #tsk tsk...what would PEP say?!
 from datetime import datetime
 #from uuid import uuid4
+from django import forms
 
 class User(Document):
     #oid = StringField(default = uuid4)
@@ -13,7 +14,7 @@ class Response(Document):
     #oid = StringField(required = True, default = uuid4)
     body = StringField(required = True)
     score = IntField(required = True, default = 0)
-    created = DateTimeField(required = True, default = datetime.now)
+    created = DateTimeField(required = True, default = lambda : datetime.now())
     author = ReferenceField(User)
 
 class Comment(Response):
@@ -27,12 +28,17 @@ class Question(Document):
     title = StringField(required = True)
     body = StringField(required = True)
     score = IntField(required = True, default = 0)
-    created = DateTimeField(required = True, default = datetime.now)
+    created = DateTimeField(required = True, default = lambda : datetime.now())
     views = IntField(required = True, default = 0)
     comments = ListField(ReferenceField(Comment), default = lambda : [])
     answers = ListField(ReferenceField(Answer), default = lambda : [])
-    tags = ListField(StringField(max_length = 50))
+    tags = ListField(StringField(max_length = 50, default = lambda : []))
     author = ReferenceField(User)
+
+    class Form(forms.Form):
+        title = forms.CharField()
+        body = forms.CharField(widget=forms.Textarea)
+        tags = forms.CharField(required = False)
 
 if __name__ == '__main__':
     connect('testing') #make sure mongod is running 
@@ -46,7 +52,7 @@ if __name__ == '__main__':
     jon_f.save()
 
     q = Question(title = 'Is mongoDB cool?', body = 'It seems neat. Is it?', \
-                tags = ['mongodb', 'python'], author = matt)
+                tags = ['mongodb', 'python'], author = matt, created = datetime.now())
 
     a = Answer(body = 'It\'s awesome, for realz', author = jon_f)
     a.save()
@@ -58,7 +64,7 @@ if __name__ == '__main__':
     q.save()
 
     q2 = Question(title = 'Another Question', body = 'Why is Python so cool?', \
-                tags = ['django', 'python'], author = jon_f)
+                tags = ['django', 'python'], author = jon_f, created = datetime.now())
     q2.save()
 
     my_question = Question.objects()[0]

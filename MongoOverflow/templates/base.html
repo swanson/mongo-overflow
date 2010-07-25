@@ -6,35 +6,36 @@
     <link rel="stylesheet" href="/media/Steely.css" type="text/css">
     <link rel="stylesheet" href="/media/styles.css" type="text/css">
   </head>
-<body>
+  <body>
     <div class="container" style="width:1050px;margin-left:auto;margin-right:auto; margin-top:0; margin-bottom:0;">
-        <div id="header" style="float:left; width:100%; border-bottom-width: 1px; border-bottom-color:black; border-bottom-style:solid;height:130px;">
-            <div id="logo" style="float:left; width:350px;">
+        <div class="header" style="float:left; width:100%; border-bottom-width: 1px; border-bottom-color:#555555; border-bottom-style:solid;height:130px;">
+            <div id="logo" style="float:left; width:345px; margin-top:50px; padding-left:5px;">
                 <h1>Mongo Overflow</h1>
                 It's like StackOverflow, but worse!                
             </div>
-            <div id="menu" style="float:left; width:695px; padding-left: 5px; padding-top:80px;">
-                <div style="float:left; margin:auto;">
-                    <ul>
+            <div id="menu" style="float:left; width:695px; padding-left: 5px; margin-top:80px;">
+                <div style="float:left;">
+                    <ul class="menu">
                         <li><a href='/questions/'>questions</a>
                         <li><a href='/questions/'>tags</a>
                         <li><a href='/questions/'>users</a>
                         <li><a href='/questions/'>unanswered</a>
                     </ul>
                 </div>
-                <div style="float:right; margin:auto;">
+                <div style="float:right;">
                     <ul>
-                        <li><a href='/questions/'>ask a question</a>
+                        <li><a href='/questions/ask/'>ask a question</a>
                     </ul>
                 </div>
             </div>
         </div>
-        <div id="content" style="min-height:450px;">
+        <div id="content" style="min-height:450px; width:100%;">
             {% block content %}{% endblock %}
         </div>
     </div>
-    <div id="footer" style="width:1050px; margin: 0pt auto; border-top-width: 1px; border-top-color:black; border-top-style:solid; text-align: center; font-size:75%;">
-        Created with mongoDB, MongoEngine, Django, and the magic of Python!
+    <br />
+    <div id="footer" style="width:1050px; margin: 0pt auto; border-top-width: 1px; border-top-color:#555555; border-top-style:dashed; text-align: center; font-size:75%; color:#555555;">
+        Created with MongoDB, MongoEngine, Django, and the magic of Python!
     </div>
 </body>
 </html>

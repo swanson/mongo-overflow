@@ -2,11 +2,22 @@ ul
 {
     padding:0;
     margin:0;
-    color:#fff;
     font-family: arial, helvetica, sans-serif;
     list-style-position: outside;
+    list-style-type: none;
+}
+
+#comment li
+{
+    background-color:gray;
+}
+
+#menu ul
+{
+    color:#fff;
     list-style-type: disc;
 }
+
 
 #menu li
 {
@@ -20,8 +31,8 @@ ul
 #menu li a
 {
     padding:0.2em 1em;
-    background:#fc6;
-    color:#000;
+    background:#3f2917;
+    color:#ffffff;
     text-decoration:none;
     float:left;
     border:1px solid #000;
@@ -29,7 +40,12 @@ ul
 
 #menu li a:hover
 {
-    background:#08c;
-    color:#fff;
+    background:#5aaf4b;
+    color:#ffffff;
+}
+
+.header
+{
+    background:#f6f4cd;
 }
 
