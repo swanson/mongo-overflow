@@ -16,8 +16,11 @@ def index(request):
     return render_to_response('index.html', context)
 
 def question_details(request, qid):
-    return render_to_response('details.html', \
-                {'question': Question.objects.get(id = qid)})
+    context = {
+                'question': Question.objects.get(id = qid),
+                'title': Question.objects.get(id = qid).title,
+              }
+    return render_to_response('details.html', context)
 
 def unanswered(request):
     context = {
@@ -46,7 +49,7 @@ def add_question(request):
     else:
         form = Question.Form()
     context = {
-            'title': 'Ask a new question',
+            'title': 'Ask a New Question',
             'form': form,
         }
     return render_to_response('ask.html', context)
