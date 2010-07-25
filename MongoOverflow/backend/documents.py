@@ -40,6 +40,18 @@ class Question(Document):
         body = forms.CharField(widget=forms.Textarea)
         tags = forms.CharField(required = False)
 
+        def clean(self):
+            cleaned_data = self.cleaned_data
+            s_title = cleaned_data.get("title")
+            s_body = cleaned_data.get("body")
+            if not s_title:
+                msg = "You must enter a title for your question."
+                self._errors["title"] = self.error_class([msg])
+            if not s_body:
+                msg = "You must enter a body for your question."
+                self._errors["body"] = self.error_class([msg])
+            return cleaned_data
+
 if __name__ == '__main__':
     connect('testing') #make sure mongod is running 
     User.drop_collection()

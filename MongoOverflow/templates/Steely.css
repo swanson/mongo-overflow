@@ -608,6 +608,8 @@ h1 + p, h2 + p, h3 + p, h4 + p, h5 + p, h6 + p, div + p, p.initial	{
 h1	{	
 	margin-left:	0;
 	margin-right:	0;
+	margin-top: 	0;
+	margin-bottom:	0;
 	padding-left:	0;
 	padding-right:	0;
 	border-left:	0;
@@ -618,6 +620,8 @@ h1	{
 h2	{	
 	margin-left:	0;
 	margin-right:	0;
+	margin-top: 	0;
+	margin-bottom:	0;
 	padding-left:	0;
 	padding-right:	0;
 	border-left:	0;
