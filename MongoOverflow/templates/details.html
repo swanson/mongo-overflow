@@ -5,9 +5,13 @@
 <div id='question'>
             <h2>{{ question.title }}</h2>
             {{ question.body }} <br />
-            {% for tag in question.tags %}
-                {{ tag }}, 
-            {% endfor %}
+            {% if question.tags %}
+                <div>
+                {% for tag in question.tags %}
+                    <a class="post-tag" href="#">{{ tag }}</a>
+                {% endfor %}
+                </div>
+            {% endif %}
             <br />
             By: {{ question.author.name }} @ {{ question.created|date:"jS F Y H:i" }}
             <ul class="comment">

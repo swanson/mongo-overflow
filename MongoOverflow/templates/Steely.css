@@ -179,8 +179,6 @@ abbr, acronym, bdo, button, fieldset, ins, label	{
 	letter-spacing:	normal;
 	text-transform:	none;
 	text-decoration:	none;
-	border-color:	#036;
-	border-style:	none;
 	}	
 		
 body	{	
@@ -274,7 +272,6 @@ a:link	{
 	text-decoration:	none;
 	font-weight:	bold;
 	color:	#F30;
-	background:	white;
 	}	
 		
 a:visited	{	
@@ -565,8 +562,6 @@ u, abbr, acronym, bdo, button, fieldset, ins, label	{
 	margin-right:	0;
 	padding-left:	0;
 	padding-right:	0;
-	border-left:	0;
-	border-right:	0;
 	text-align:	left;
 	float:	none;
 	clear:	none;
