@@ -5,7 +5,36 @@
 <ul>
     {% for question in questions %}
     
-    <li><a href="/questions/{{ question.id }}">{{ question.title }}</a></li>
+    <li class="question-summary">
+        <div class='stats'>
+            <div class='votes'>
+                <div class='number'>{{ question.score }}</div>
+                <div>votes</div>
+            </div>
+            {% if question.answers %}
+            <div class='has-answers'>
+                <div class='number'>{{ question.answers|length }}</div>
+                <div>answers</div>
+            </div>
+            {% else %}
+            <div class='no-answers'>
+                <div class='number'>{{ question.answers|length }}</div>
+                <div>answers</div>
+            </div>
+            {% endif %}
+        </div>
+        <div class="summary">
+            <h3><a href="/questions/{{ question.id }}">{{ question.title }}</a></h3>
+            {% if question.tags %}
+                <div style="float:left;">
+                {% for tag in question.tags %}
+                <a class="post-tag" href="#">{{ tag }}</a>
+                {% endfor %}
+                </div>
+            {% endif %}
+            <div class="activity">{{ question.author.name }}</div>
+        </div>
+        </li>
     {% endfor %}
 </ul>
 {% endblock %}

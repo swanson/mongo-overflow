@@ -155,3 +155,67 @@ li.comment {
     padding-right:2px;
     padding-top:1px;
 }
+
+li.question-summary {
+    width:800px;
+    min-height:50px;
+    border-bottom-color:#888888;
+    border-bottom-style:solid;
+    border-bottom-width:1px;
+    padding-bottom:20px;
+    margin-top: 10px;
+}
+
+.summary {
+    float:left;
+    width:80%;
+}
+
+.votes {
+    float:left;
+    background:#F6F4CD;
+    padding: 0px 4px;
+}
+
+.no-answers {
+    float:left;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-align:center;
+}
+
+.has-answers {
+    float:left;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-align:center;
+}
+
+.no-answers div {
+    text-align:center;
+    color:#ffffff;
+    background-color: red;
+    padding: 0px 4px;
+}
+
+.has-answers div {
+    text-align:center;
+    color:#ffffff;
+    background-color: green;
+    padding: 0px 4px;
+}
+
+.number {
+    font-size:150%;
+    font-weight:bold;
+    text-align:center;
+}
+
+.activity {
+    float:right;
+}
+
+.stats {
+    float:left;
+    width:20%;
+}
