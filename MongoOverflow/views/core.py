@@ -5,15 +5,26 @@ from django.core.urlresolvers import reverse
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.conf import settings
 
-from backend.documents import Question, User
+from backend.documents import Question, User, Answer
 from datetime import datetime
 
 def index(request):
-    return render_to_response('index.html', {'questions': Question.objects})
+    context = {
+                'questions': Question.objects,
+                'title': 'All Questions'
+              }
+    return render_to_response('index.html', context)
 
 def question_details(request, qid):
     return render_to_response('details.html', \
                 {'question': Question.objects.get(id = qid)})
+
+def unanswered(request):
+    context = {
+                'questions': Question.objects(answers__size = 0),
+                'title': 'Unanswered Questions'
+              }
+    return render_to_response('index.html', context)
 
 def add_question(request):
     if request.method == 'POST': #form was posted
@@ -32,8 +43,8 @@ def add_question(request):
                     tags = tags)
             new_question.save()
             return HttpResponseRedirect('/questions/%s' % new_question.id)
-    
-    form = Question.Form()
+    else:
+        form = Question.Form()
     context = {
             'title': 'Ask a new question',
             'form': form,
