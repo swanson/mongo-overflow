@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import *
-from views.core import index, add_question, unanswered, question_details
+from views.core import index, add_question, unanswered, question_details, login_view, logout_view
 
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
@@ -7,6 +7,8 @@ from views.core import index, add_question, unanswered, question_details
 
 urlpatterns = patterns('',
      ('^$', index),
+     ('^login/$', login_view),
+     ('^logout/$', logout_view),
      ('^questions/$', index),
      ('^questions/ask/$', add_question),
      ('^questions/unanswered/$', unanswered),

@@ -4,14 +4,19 @@ from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.conf import settings
+from django.contrib.auth.forms import AuthenticationForm
+from mongoengine.django.auth import MongoEngineBackend
 
 from backend.documents import Question, User, Answer, Comment
 from datetime import datetime
+from django.contrib.auth import login as d_login
+from django.contrib.auth import authenticate, logout
 
 def index(request):
     context = {
                 'questions': Question.objects,
-                'title': 'All Questions'
+                'title': 'All Questions',
+                'user':request.user
               }
     return render_to_response('index.html', context)
 
@@ -25,7 +30,7 @@ def question_details(request, qid):
             if comment_form.is_valid():
                 body = comment_form.cleaned_data['comment_body']
                 new_comment = Comment(body = body, 
-                        author = User.objects.get(name='matt'))
+                        author = request.user)
                 new_comment.save()
                 question.comments.append(new_comment)
                 question.save()
@@ -35,7 +40,7 @@ def question_details(request, qid):
             if answer_form.is_valid():
                 body = answer_form.cleaned_data['body']
                 new_answer = Answer(body = body,
-                        author = User.objects.get(name='matt'))
+                        author = request.user)
                 new_answer.save()
                 question.answers.append(new_answer)
                 question.save()
@@ -46,6 +51,7 @@ def question_details(request, qid):
                 'title': Question.objects.get(id = qid).title,
                 'comment_form': comment_form,
                 'answer_form': answer_form,
+                'user': request.user,
               }
     return render_to_response('details.html', context)
 
@@ -67,9 +73,8 @@ def add_question(request):
                 tags = []
             else:
                 tags = tags.split(',')
-            print tags
             new_question = Question(title = title, body = body, 
-                    author = User.objects.get(name='matt'), 
+                    author = request.user,
                     tags = tags)
             new_question.save()
             return HttpResponseRedirect('/questions/%s' % new_question.id)
@@ -78,5 +83,37 @@ def add_question(request):
     context = {
             'title': 'Ask a New Question',
             'form': form,
+            'user': request.user
         }
     return render_to_response('ask.html', context)
+
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect('/')
+
+def login_view(request):
+    user = None
+    if request.method == 'POST':
+        logout(request)
+        username = request.POST['username']
+        password = request.POST['password']
+        foo = MongoEngineBackend()
+        user = authenticate(username = username, password = password)
+        if user is not None:
+            d_login(request, user)
+            request.session['user'] = user
+            return HttpResponseRedirect('/')
+        else:
+            #pseudo-register...
+            new_user = User(username = username)
+            new_user.set_password(password)
+            new_user.save()
+        form = AuthenticationForm()
+    else:
+        form = AuthenticationForm()
+    context = {
+            'title': 'Log In',
+            'form': form,
+            'user': user,
+        }
+    return render_to_response('login.html', context)

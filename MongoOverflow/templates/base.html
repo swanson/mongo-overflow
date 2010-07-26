@@ -30,6 +30,12 @@
             </div>
         </div>
         <div id="content" style="min-height:450px; width:100%;">
+            {% if user.is_authenticated %}
+                Welcome {{ user.username }} | <a href='/logout'>Logout</a>
+            {% else %}
+                <a href='/login'>Login</a>
+            {% endif %}
+
             {% block content %}{% endblock %}
         </div>
     </div>

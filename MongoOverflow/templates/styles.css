@@ -156,14 +156,15 @@ li.comment {
     padding-top:1px;
 }
 
-li.question-summary {
+.question-summary {
     width:800px;
     min-height:50px;
     border-bottom-color:#888888;
     border-bottom-style:solid;
     border-bottom-width:1px;
-    padding-bottom:20px;
-    margin-top: 10px;
+    float:left;
+    display:block;
+    padding-bottom:10px;
 }
 
 .summary {
@@ -218,4 +219,5 @@ li.question-summary {
 .stats {
     float:left;
     width:20%;
+    margin-top:10px;
 }

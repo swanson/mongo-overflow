@@ -13,11 +13,11 @@
                 </div>
             {% endif %}
             <br />
-            By: {{ question.author.name }} @ {{ question.created|date:"jS F Y H:i" }}
+            By: {{ question.author.username }} @ {{ question.created|date:"jS F Y H:i" }}
             <ul>
             {% for comment in question.comments %}
                 <li class="comment">
-                {{ comment.body }} - {{ comment.author.name }} @
+                {{ comment.body }} - {{ comment.author.username }} @
                 {{ comment.created|date:"jS F Y H:i" }} </li>
             {% endfor %}
             <li class="comment">
@@ -39,11 +39,11 @@ font-size:80%; padding-top:2px;"/>
 <div id='answers'>
     {% for answer in question.answers %}
             {{ answer.body }} <br />
-            By: {{ answer.author.name }} @ {{ answer.created|date:"jS F Y H:i" }}
+            By: {{ answer.author.username }} @ {{ answer.created|date:"jS F Y H:i" }}
                         <ul class="comment">
             {% for comment in answer.comments %}
                 <li class="comment">
-                {{ comment.body }} - {{ comment.author.name }} @
+                {{ comment.body }} - {{ comment.author.username }} @
                 {{ comment.created|date:"jS F Y H:i" }} </li>
             {% endfor %}
             </ul>

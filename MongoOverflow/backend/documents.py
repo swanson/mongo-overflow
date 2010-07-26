@@ -2,11 +2,12 @@ from mongoengine import * #tsk tsk...what would PEP say?!
 from datetime import datetime
 #from uuid import uuid4
 from django import forms
+from mongoengine.django.auth import User as MongoUser
 
-class User(Document):
+class User(MongoUser):
     #oid = StringField(default = uuid4)
-    name = StringField(required = True)
-    email = StringField()
+#    name = StringField(required = True)
+#    email = StringField()
     avatar = URLField()
     rep = IntField(required = True, default = 0)
 
@@ -16,6 +17,7 @@ class Response(Document):
     score = IntField(required = True, default = 0)
     created = DateTimeField(required = True, default = lambda : datetime.now())
     author = ReferenceField(User)
+    voters = ListField(ReferenceField(User), default = lambda : [])
 
 class Comment(Response):
     class Form(forms.Form):
@@ -38,6 +40,7 @@ class Question(Document):
     answers = ListField(ReferenceField(Answer), default = lambda : [])
     tags = ListField(StringField(max_length = 50, default = lambda : []))
     author = ReferenceField(User)
+    voters = ListField(ReferenceField(User), default = lambda : [])
 
     class Form(forms.Form):
         title = forms.CharField()
@@ -62,17 +65,18 @@ if __name__ == '__main__':
     Question.drop_collection()
     Answer.drop_collection()
 
-    matt = User(name = 'matt', email = 'matt@mail.com')
+    matt = User(username = 'matt', password = 'pw', email = 'matt@mail.com')
     matt.save()
-    jon_f = User(name = 'Jon F', email = 'jonf@mail.com')
-    jon_f.save()
+
+    joe = User(username = 'joe', password = 'pw', email = 'joe@mail.com')
+    joe.save()
 
     q = Question(title = 'Is mongoDB cool?', body = 'It seems neat. Is it?', \
                 tags = ['mongodb', 'python'], author = matt, created = datetime.now())
 
-    a = Answer(body = 'It\'s awesome, for realz', author = jon_f)
+    a = Answer(body = 'It\'s awesome, for realz', author = joe)
     a.save()
-    c = Comment(body = 'Possible dup', author = jon_f)
+    c = Comment(body = 'Possible dup', author = joe)
     c.save()
 
     q.answers.append(a)
@@ -80,7 +84,7 @@ if __name__ == '__main__':
     q.save()
 
     q2 = Question(title = 'Another Question', body = 'Why is Python so cool?', \
-                tags = ['django', 'python'], author = jon_f, created = datetime.now())
+                tags = ['django', 'python'], author = joe, created = datetime.now())
     q2.save()
 
     my_question = Question.objects()[0]

@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 
+
 {% block content %}
+
 <h2>{{ title }}</h2>
 <ul>
     {% for question in questions %}
@@ -32,7 +34,10 @@
                 {% endfor %}
                 </div>
             {% endif %}
-            <div class="activity">{{ question.author.name }}</div>
+            <div class="activity">{{question.created|date:"jS F Y H:i"}}
+                <a href='#'>{{ question.author.username }}</a>
+                                    {{ question.author.rep }}
+                                </div>
         </div>
         </li>
     {% endfor %}
