@@ -45,6 +45,7 @@ def question_details(request, qid):
                 question.answers.append(new_answer)
                 question.save()
                 answer_form = Answer.Form()
+        return HttpResponseRedirect('/questions/%s' % question.id)
     
     context = {
                 'question': question,
@@ -101,7 +102,6 @@ def login_view(request):
         user = authenticate(username = username, password = password)
         if user is not None:
             d_login(request, user)
-            request.session['user'] = user
             return HttpResponseRedirect('/')
         else:
             #pseudo-register...

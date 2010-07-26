@@ -268,20 +268,17 @@ a:visited	{
 	text-decoration:	none;
 	font-weight:	bold;
 	color:	#996;
-	background:	white;
 	}	
 		
 a:active	{	
 	text-decoration:	none;
 	font-weight:	bold;
 	color:	#F30;
-	background:	#FF0;
 	}	
 		
 a:hover	{	
 	text-decoration:	none;
 	color:	#F30;
-	background:	white;
 	}	
 		
 a.offsite	{	
