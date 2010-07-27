@@ -1,23 +1,39 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div style="float:left; width: 100%;">
-<div id='question'>
+<div style="width: 100%;">
+    <div class='voting-block'>
+        +<br />{{question.score}}<br />-
+    </div>
+    <div class='question-div'>
+        <div class='question-body'>
             <h2>{{ question.title }}</h2>
             {{ question.body }} <br />
             {% if question.tags %}
-                <div>
+                <div class="tags">
                 {% for tag in question.tags %}
                     <a class="post-tag" href="#">{{ tag }}</a>
                 {% endfor %}
-                </div>
+            </div>
             {% endif %}
-            <br />
-            By: {{ question.author.username }} @ {{ question.created|date:"jS F Y H:i" }}
+             </br>
+        </div>
+            <div class="posted-by">
+                By: 
+                <a href="/users/{{question.author.id}}">
+                    {{ question.author.username }}
+                </a> 
+                <br />@ {{ question.created|date:"jS F Y H:i" }}
+            </div>
+        </div>
+        <div class="comments">
             <ul>
             {% for comment in question.comments %}
                 <li class="comment">
-                {{ comment.body }} - {{ comment.author.username }} @
+                {{ comment.body }} -<a href="/users/{{comment.author.id}}">
+                    {{ comment.author.username }}
+                </a> 
+ @
                 {{ comment.created|date:"jS F Y H:i" }} </li>
             {% endfor %}
             <li class="comment">
@@ -28,27 +44,43 @@
                     style="background-color:#5AAF4B; color:#ffffff;
 font-size:80%; padding-top:2px;"/>
                 </form>
-            </div>  
             </li>
         </ul>
+    </div>
         <br />
         <br />
 </div>
-
-<h3>{{ question.answers|length }} Answer(s)</h3>
-<div id='answers'>
+<div class='answers-div'>
+    <h3>{{ question.answers|length }} Answer(s)</h3>
     {% for answer in question.answers %}
-            {{ answer.body }} <br />
-            By: {{ answer.author.username }} @ {{ answer.created|date:"jS F Y H:i" }}
-                        <ul class="comment">
-            {% for comment in answer.comments %}
-                <li class="comment">
-                {{ comment.body }} - {{ comment.author.username }} @
-                {{ comment.created|date:"jS F Y H:i" }} </li>
-            {% endfor %}
-            </ul>
+    <div class='voting-block'>
+        +<br />{{answer.score}}<br />-
+    </div>
+
+    <div class='answer-content'>
+            <div class='answer-body'>
+                {{ answer.body }} <br />
+            </div>
+            <div class="posted-by">
+                By: 
+                <a href="/users/{{answer.author.id}}">
+                    {{ answer.author.username }}
+                </a> 
+                <br />@ {{ answer.created|date:"jS F Y H:i" }}
+            </div>
+            <div class="comments">
+                <ul>
+                {% for comment in answer.comments %}
+                    <li>
+                    {{ comment.body }} - {{ comment.author.username }} @
+                    {{ comment.created|date:"jS F Y H:i" }} </li>
+                {% endfor %}
+                </ul>
+            </div>
+    </div>
     {% endfor %}
 </div>
+<div style="float:left;">
 <h3>Your Answer</h3>
 <form action="" method="post">
     {{ answer_form }}
@@ -56,6 +88,7 @@ font-size:80%; padding-top:2px;"/>
         <input type="submit" value="Post an Answer" style="display:block;"/>
     </div>
 </form>
+</div>
 
 </div>
 {% endblock %}

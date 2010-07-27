@@ -6,10 +6,27 @@ ul
     list-style-type: none;
 }
 
+.login-panel {
+    width:100%;
+    text-align:right;
+}
+
 .errorlist
 {
     color:red;
     font-weight:bold;
+}
+
+.sidebar {
+    padding-left:1%;
+    padding-right:1%;
+    float:right;
+    width:18%;
+    background-color:#3F2917;
+    color:#ffffff;
+    font-weight:bold;
+    padding-bottom:10px;
+    text-align:center;
 }
 
 #comment li
@@ -220,4 +237,43 @@ li.comment {
     float:left;
     width:20%;
     margin-top:10px;
+}
+
+.posted-by {
+    float:right;
+}
+
+.comments {
+    float:left;
+}
+
+.tags {
+    width:50%;
+    float:left;
+}
+
+.question-div {
+    float:left;
+    min-height:100px;
+    width:1000px;
+}
+
+.answers-div {
+    float:left;
+    width:100%;
+}
+
+.answer-content {
+    width:1000px;
+    float:left;
+    min-height:100px;
+    border-bottom-color:#888888;
+    border-bottom-style:solid;
+    border-bottom-width:1px;
+}
+
+.voting-block {
+    float:left;
+    width:50px;
+    text-align:center;
 }

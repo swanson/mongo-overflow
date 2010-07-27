@@ -4,6 +4,7 @@
 {% block content %}
 
 <h2>{{ title }}</h2>
+<div style="float:left;width:80%;">
 <ul>
     {% for question in questions %}
     
@@ -35,11 +36,17 @@
                 </div>
             {% endif %}
             <div class="activity">{{question.created|date:"jS F Y H:i"}}
-                <a href='#'>{{ question.author.username }}</a>
+                <a href='/users/{{ question.author.id }}'>{{ question.author.username }}</a>
                                     {{ question.author.rep }}
                                 </div>
         </div>
         </li>
     {% endfor %}
 </ul>
+</div>
+<div class='sidebar'>
+    Mongo Overflow is a Q&A site. <br/><br/>
+    Except there are no real questions...<br/><br/>
+    And no useful answers...
+</div>
 {% endblock %}

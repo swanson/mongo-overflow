@@ -8,17 +8,24 @@
   </head>
   <body>
     <div class="container" style="width:1050px;margin-left:auto;margin-right:auto; margin-top:0; margin-bottom:0;">
-        <div class="header" style="float:left; width:100%; border-bottom-width: 1px; border-bottom-color:#555555; border-bottom-style:solid;height:130px;">
-            <div id="logo" style="float:left; width:345px; margin-top:50px; padding-left:5px;">
-                <h1><a href="/">Mongo Overflow</a></h1>
-                It's like StackOverflow, but worse!                
+        <div class="header" style="width:100%; border-bottom-width: 1px; border-bottom-color:#555555; border-bottom-style:solid;height:130px;">
+            <div class='login-panel'>
+                {% if user.is_authenticated %}
+                Welcome <a href='question/{{user.id}}'>{{ user.username }}</a>,
+                Your rep is {{user.rep}} | <a href='/logout'>Logout</a>
+                {% else %}
+                <a href='/login'>Login</a> | <a href='#'>Register</a>
+                {% endif %}
             </div>
-            <div id="menu" style="float:left; width:695px; padding-left: 5px; margin-top:80px;">
+            <div id="logo" style="float:left; width:345px; margin-top:35px; padding-left:5px;">
+                <h1><a href="/">Mongo Overflow</a></h1>
+                It's like Stack Overflow, but worse!                
+            </div>
+            <div id="menu" style="float:left; width:695px; padding-left: 5px; margin-top:65px;">
                 <div style="float:left;">
                     <ul class="menu">
                         <li><a href='/questions/'>questions</a>
-                        <li><a href='/questions/'>tags</a>
-                        <li><a href='/questions/'>users</a>
+                        <li><a href='/users/'>users</a>
                         <li><a href='/questions/unanswered/'>unanswered</a>
                     </ul>
                 </div>
@@ -30,12 +37,6 @@
             </div>
         </div>
         <div id="content" style="min-height:450px; width:100%;">
-            {% if user.is_authenticated %}
-                Welcome {{ user.username }} | <a href='/logout'>Logout</a>
-            {% else %}
-                <a href='/login'>Login</a>
-            {% endif %}
-
             {% block content %}{% endblock %}
         </div>
     </div>

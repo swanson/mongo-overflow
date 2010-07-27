@@ -117,3 +117,20 @@ def login_view(request):
             'user': user,
         }
     return render_to_response('login.html', context)
+
+def user_details(request, id):
+    user = User.objects.get(id = id)
+    context = {
+                'user_to_show': user,
+                'title': user.username,
+                'user': request.user,
+              }
+    return render_to_response('user.html', context)
+
+def user_list(request):
+    context = {
+                'users': User.objects,
+                'title': 'All Users',
+                'user': request.user,
+              }
+    return render_to_response('user_list.html', context)

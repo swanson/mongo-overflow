@@ -1,18 +1,13 @@
 from mongoengine import * #tsk tsk...what would PEP say?!
 from datetime import datetime
-#from uuid import uuid4
 from django import forms
 from mongoengine.django.auth import User as MongoUser
 
 class User(MongoUser):
-    #oid = StringField(default = uuid4)
-#    name = StringField(required = True)
-#    email = StringField()
     avatar = URLField()
     rep = IntField(required = True, default = 0)
 
 class Response(Document):
-    #oid = StringField(required = True, default = uuid4)
     body = StringField(required = True)
     score = IntField(required = True, default = 0)
     created = DateTimeField(required = True, default = lambda : datetime.now())
@@ -30,7 +25,6 @@ class Answer(Response):
         body = forms.CharField(widget = forms.Textarea, label = '')
 
 class Question(Document):
-    #oid = StringField(required = True, default = uuid4)
     title = StringField(required = True)
     body = StringField(required = True)
     score = IntField(required = True, default = 0)
