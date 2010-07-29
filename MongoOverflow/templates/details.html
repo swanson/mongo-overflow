@@ -4,7 +4,7 @@
 <script>
   function vote(kind) {
     $.getJSON("/vote/", { qid:"{{ question.id }}", vote: kind }, function(json){
-      alert("Was successful?: " + json['success']);
+        $("#vote-count").html(json['count']);
     });
   }
   function addClickHandlers() {
@@ -13,11 +13,14 @@
  }
  $(document).ready(addClickHandlers);
   </script>
+      {% if user in question.voters %}
+        you have voted for this question already
+      {% endif %}
 
-<div style="width: 100%;">
+  <div style="width: 100%;">
     <div class='voting-block'>
         <span id="upvote">+</span>
-        <br />{{question.score}}<br />
+        <br /><span id="vote-count">{{question.score}}</span><br />
         <span id="downvote">-</span>
     </div>
     <div class='question-div'>

@@ -36,11 +36,13 @@ class Question(Document):
     author = ReferenceField(User)
     voters = ListField(ReferenceField(User), default = lambda : [])
 
-    def vote_up(self, username):
-        Question.objects(id=self.id).update_one(inc__score=1)
+    def vote_up(self, user):
+        if Question.objects(id=self.id, voters__nin=[user]):
+            Question.objects(id=self.id).update_one(inc__score=1, push__voters=user)
 
     def vote_down(self, user):
-        Question.objects(id=self.id).update_one(dec__score=1)
+        if Question.objects(id=self.id, voters__nin=[user]):
+            Question.objects(id=self.id).update_one(dec__score=1, push__voters=user)
 
     class Form(forms.Form):
         title = forms.CharField()

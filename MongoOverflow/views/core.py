@@ -148,7 +148,9 @@ def vote(request):
                 question.vote_up(request.user)
             elif vote == "down":
                 question.vote_down(request.user)
-            results = {'success':True}
+            question.reload()
+            results = {'success':True, 'count':question.score}
+            print question.score
     json = simplejson.dumps(results)
     return HttpResponse(json, mimetype='application/json')
 
