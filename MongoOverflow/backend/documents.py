@@ -40,7 +40,7 @@ class Question(Document):
         Question.objects(id=self.id).update_one(inc__score=1)
 
     def vote_down(self, user):
-        pass
+        Question.objects(id=self.id).update_one(dec__score=1)
 
     class Form(forms.Form):
         title = forms.CharField()
