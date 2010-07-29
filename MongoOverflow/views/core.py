@@ -138,7 +138,7 @@ def user_list(request):
 
 def vote(request):
     results = {'success':False}
-    if request.method == 'GET':
+    if request.method == 'GET' and request.user.is_authenticated():
         GET = request.GET
         if GET.has_key('qid') and GET.has_key('vote'):
             qid = GET['qid']
@@ -150,7 +150,6 @@ def vote(request):
                 question.vote_down(request.user)
             question.reload()
             results = {'success':True, 'count':question.score}
-            print question.score
     json = simplejson.dumps(results)
     return HttpResponse(json, mimetype='application/json')
 
