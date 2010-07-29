@@ -11,6 +11,7 @@ from backend.documents import Question, User, Answer, Comment
 from datetime import datetime
 from django.contrib.auth import login as d_login
 from django.contrib.auth import authenticate, logout
+from django.utils import simplejson
 
 def index(request):
     context = {
@@ -134,3 +135,20 @@ def user_list(request):
                 'user': request.user,
               }
     return render_to_response('user_list.html', context)
+
+def vote(request):
+    results = {'success':False}
+    if request.method == 'GET':
+        GET = request.GET
+        if GET.has_key('qid') and GET.has_key('vote'):
+            qid = GET['qid']
+            vote = GET['vote']
+            question = Question.objects.get(id = qid)
+            if vote == "up":
+                question.vote_up(request.user)
+            elif vote == "down":
+                pass
+            results = {'success':True}
+    json = simplejson.dumps(results)
+    return HttpResponse(json, mimetype='application/json')
+

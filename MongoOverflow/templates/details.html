@@ -1,9 +1,24 @@
 {% extends "base.html" %}
 
 {% block content %}
+<script>
+  function vote(kind) {
+    $.getJSON("/vote/", { qid:"{{ question.id }}", vote: kind }, function(json){
+      alert("Was successful?: " + json['success']);
+    });
+  }
+  function addClickHandlers() {
+    $("#upvote").click( function() { vote("up") });
+    $("#downvote").click( function() { vote("down") });
+ }
+ $(document).ready(addClickHandlers);
+  </script>
+
 <div style="width: 100%;">
     <div class='voting-block'>
-        +<br />{{question.score}}<br />-
+        <span id="upvote">+</span>
+        <br />{{question.score}}<br />
+        <span id="downvote">-</span>
     </div>
     <div class='question-div'>
         <div class='question-body'>
@@ -49,12 +64,14 @@ font-size:80%; padding-top:2px;"/>
     </div>
         <br />
         <br />
-</div>
+    </div>    
 <div class='answers-div'>
     <h3>{{ question.answers|length }} Answer(s)</h3>
     {% for answer in question.answers %}
     <div class='voting-block'>
-        +<br />{{answer.score}}<br />-
+        +
+        <br />{{answer.score}}<br />
+        -
     </div>
 
     <div class='answer-content'>
