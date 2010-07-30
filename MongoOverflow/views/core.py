@@ -7,7 +7,7 @@ from django.conf import settings
 from django.contrib.auth.forms import AuthenticationForm
 from mongoengine.django.auth import MongoEngineBackend
 
-from backend.documents import Question, User, Answer, Comment
+from backend.documents import Question, User, Answer, Comment, Vote
 from datetime import datetime
 from django.contrib.auth import login as d_login
 from django.contrib.auth import authenticate, logout
@@ -145,11 +145,26 @@ def vote(request):
             vote = GET['vote']
             question = Question.objects.get(id = qid)
             if vote == "up":
-                question.vote_up(request.user)
+                v = question.vote_up(request.user)
             elif vote == "down":
-                question.vote_down(request.user)
+                v = question.vote_down(request.user)
             question.reload()
-            results = {'success':True, 'count':question.score}
+            results = {'success':True, 'count':question.score, 'vote':v}
+    json = simplejson.dumps(results)
+    return HttpResponse(json, mimetype='application/json')
+
+def vote_color(request):
+    results = {'success':False}
+    if request.method == 'GET' and request.user.is_authenticated():
+        GET = request.GET
+        if GET.has_key('qid'):
+            qid = GET['qid']
+            question = Question.objects.get(id = qid)
+            try:
+                your_vote = Vote.objects.get(question = question, user = request.user)
+                results = {'success':True, 'vote':your_vote.score }
+            except:
+                results = {'success':True, 'vote':0 }
     json = simplejson.dumps(results)
     return HttpResponse(json, mimetype='application/json')
 

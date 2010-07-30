@@ -3,25 +3,64 @@
 {% block content %}
 <script>
   function vote(kind) {
-    $.getJSON("/vote/", { qid:"{{ question.id }}", vote: kind }, function(json){
-        $("#vote-count").html(json['count']);
+      $.getJSON("/vote/", { qid:"{{ question.id }}", vote: kind }, function(json){
+        $("#vote-count").text(json['count']);
+        if (json['vote'] == 1)
+        {
+            $("#upvote").removeClass().addClass("voted_up");
+            $("#downvote").removeClass().addClass("no_vote");
+        }
+        else if (json['vote'] == -1)
+        {
+            $("#downvote").removeClass().addClass("voted_down");
+            $("#upvote").removeClass().addClass("no_vote");
+        }
+        else
+        {
+            $("#upvote").removeClass().addClass("no_vote");
+            $("#downvote").removeClass().addClass("no_vote");
+        }
+
     });
   }
   function addClickHandlers() {
     $("#upvote").click( function() { vote("up") });
     $("#downvote").click( function() { vote("down") });
- }
- $(document).ready(addClickHandlers);
+}
+
+  function setVoteColor() {
+      $.getJSON("/vote_color/", {qid:"{{ question.id }}"}, function(json){
+        if (json['vote'] == 1)
+        {
+            $("#upvote").removeClass().addClass("voted_up");
+            $("#downvote").removeClass().addClass("no_vote");
+        }
+        else if (json['vote'] == -1)
+        {
+            $("#downvote").removeClass().addClass("voted_down");
+            $("#upvote").removeClass().addClass("no_vote");
+        }
+        else
+        {
+            $("#upvote").removeClass().addClass("no_vote");
+            $("#downvote").removeClass().addClass("no_vote");
+        }
+    });
+  }
+  $(document).ready(addClickHandlers);
+  setVoteColor();
   </script>
-      {% if user in question.voters %}
+  {% for vote in question.votes %}
+    {% if user == vote.user %}
         you have voted for this question already
-      {% endif %}
+    {% endif %}
+  {% endfor %}
 
   <div style="width: 100%;">
     <div class='voting-block'>
-        <span id="upvote">+</span>
-        <br /><span id="vote-count">{{question.score}}</span><br />
-        <span id="downvote">-</span>
+        <span id="upvote" class="no_vote">▲</span>
+        <br /><span id="vote-count" class="no_vote">{{question.score}}</span><br />
+        <span id="downvote" class="no_vote">▼</span>
     </div>
     <div class='question-div'>
         <div class='question-body'>

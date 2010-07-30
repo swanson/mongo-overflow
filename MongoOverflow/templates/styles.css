@@ -277,3 +277,22 @@ li.comment {
     width:50px;
     text-align:center;
 }
+
+.voted_up {
+    color:green;
+    font-weight:bold;
+    font-size:200%;
+}
+
+.no_vote {
+    color:gray;
+    font-weight:bold;
+    font-size:150%;
+    text-align:center;
+}
+
+.voted_down {
+    color:red;
+    font-weight:bold;
+    font-size:200%;
+}

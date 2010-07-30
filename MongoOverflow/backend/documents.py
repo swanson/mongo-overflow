@@ -24,6 +24,7 @@ class Answer(Response):
     class Form(forms.Form):
         body = forms.CharField(widget = forms.Textarea, label = '')
 
+
 class Question(Document):
     title = StringField(required = True)
     body = StringField(required = True)
@@ -34,15 +35,41 @@ class Question(Document):
     answers = ListField(ReferenceField(Answer), default = lambda : [])
     tags = ListField(StringField(max_length = 50, default = lambda : []))
     author = ReferenceField(User)
-    voters = ListField(ReferenceField(User), default = lambda : [])
 
     def vote_up(self, user):
-        if Question.objects(id=self.id, voters__nin=[user]):
-            Question.objects(id=self.id).update_one(inc__score=1, push__voters=user)
+        try:
+            your_vote = Vote.objects.get(question = self, user = user)
+            if your_vote.score == -1:
+                your_vote.score = 1
+                your_vote.save()
+                Question.objects(id=self.id).update_one(inc__score=2)
+            elif your_vote.score == 1:
+                your_vote.delete()
+                Question.objects(id=self.id).update_one(dec__score=1)
+                return 0
+        except:
+            vote = Vote(question = self, user = user, score = 1)
+            vote.save()
+            Question.objects(id=self.id).update_one(inc__score=1)
+        return 1
+
 
     def vote_down(self, user):
-        if Question.objects(id=self.id, voters__nin=[user]):
-            Question.objects(id=self.id).update_one(dec__score=1, push__voters=user)
+        try:
+            your_vote = Vote.objects.get(question = self, user = user)
+            if your_vote.score == 1:
+                your_vote.score = -1
+                your_vote.save()
+                Question.objects(id=self.id).update_one(dec__score=2)
+            elif your_vote.score == -1:
+                your_vote.delete()
+                Question.objects(id=self.id).update_one(inc__score=1)
+                return 0
+        except:
+            vote = Vote(question = self, user = user, score = -1)
+            vote.save()
+            Question.objects(id=self.id).update_one(dec__score=1)
+        return -1
 
     class Form(forms.Form):
         title = forms.CharField()
@@ -60,6 +87,11 @@ class Question(Document):
                 msg = "You must enter a body for your question."
                 self._errors["body"] = self.error_class([msg])
             return cleaned_data
+
+class Vote(Document):
+    user = ReferenceField(User, required = True)
+    score = IntField(required = True, default = 0)
+    question = ReferenceField(Question, required = True)
 
 if __name__ == '__main__':
     connect('testing') #make sure mongod is running 
