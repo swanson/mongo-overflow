@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block body %}
+Welcome!
+{% if g.user %}
+    Hello {{ g.user.username }}!
+    <a href='/logout'>Logout</a>
+{% else %}
+    <a href='/login'>Login</a>
+{% endif %}
+{% endblock %}
+
