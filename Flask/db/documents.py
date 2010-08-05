@@ -1,5 +1,6 @@
 from mongoengine import * #tsk tsk...what would PEP say?!
 from datetime import datetime
+from wtforms import Form, TextField, TextAreaField
 
 class User(Document):
     name = StringField(required = True)
@@ -32,6 +33,11 @@ class Question(Document):
     answers = ListField(ReferenceField(Answer), default = lambda : [])
     tags = ListField(StringField(max_length = 50, default = lambda : []))
     author = ReferenceField(User)
+
+class QuestionInputForm(Form):
+    title = TextField("What's your question?")
+    body = TextAreaField("Body")
+    tags = TextField("Tags")
 
 class Vote(Document):
     user = ReferenceField(User, required = True)

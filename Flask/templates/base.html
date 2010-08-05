@@ -38,12 +38,21 @@
             </div>
         </div>
         <div id="content" style="min-height:450px; width:100%;">
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                <ul class=flashes>
+                {% for message in messages %}
+                  <li>{{ message }}</li>
+                {% endfor %}
+                </ul>
+              {% endif %}
+            {% endwith %}
             {% block content %}{% endblock %}
         </div>
     </div>
     <br />
     <div id="footer" style="width:1050px; margin: 0pt auto; border-top-width: 1px; border-top-color:#555555; border-top-style:dashed; text-align: center; font-size:75%; color:#555555;clear:both;">
-        Created with MongoDB, MongoEngine, Django, and the magic of Python!
+        Created with MongoDB, MongoEngine, Flask, and the magic of Python!
     </div>
 </body>
 </html>

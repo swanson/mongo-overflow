@@ -3,13 +3,14 @@
 {% block content %}
 <div style="float:left; width: 100%;">
 <h2> {{ title }} </h2>
-<form action="" method="post">
-    <table>
-        {{ form }}
-        <tr>
-            <th></th><td><input type="submit" value="Post Your Question" /></td>
-        </tr>
-    </table>
+{% from "_formhelpers.html" import render_field %}
+<form method="POST" action=".">
+  <dl>
+    {{ render_field(form.title) }}
+    {{ render_field(form.body) }}
+    {{ render_field(form.tags) }}
+  </dl>
+  <p><input type=submit value="Post Question">
 </form>
 </div>
 {% endblock %}

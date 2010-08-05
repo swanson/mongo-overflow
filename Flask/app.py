@@ -1,6 +1,6 @@
 from flask import Flask, g, session, request, render_template, flash, redirect, url_for
 from flaskext.openid import OpenID
-from db.documents import User, Question
+from db.documents import User, Question, QuestionInputForm
 from mongoengine import *
 
 app = Flask(__name__)
@@ -26,9 +26,25 @@ def index():
 def question_details(id):
     return "question details"
 
-@app.route('/questions/ask/')
+@app.route('/questions/ask/', methods=['POST', 'GET'])
 def ask_question():
-    return "ask"
+    form = QuestionInputForm(request.form)
+    if request.method == 'POST' and form.validate():
+        title = form.title.data
+        body = form.body.data
+        tags = form.tags.data
+        if tags == '':
+            tags = []
+        else:
+            tags = tags.split(',')
+        new_question = Question(title = title, body = body, 
+                    author = g.user,
+                    tags = tags)
+        new_question.save()
+        return redirect('/questions/%s' % new_question.id)
+    elif request.method == 'POST':
+        flash("Put it some data please")
+    return render_template('ask.html', form = form, title = 'Ask a question')
 
 @app.route('/questions/unanswered/')
 def unanswered_questions():
@@ -100,4 +116,4 @@ def logout():
 
 if __name__ == '__main__':
     connect('flask-test')
-    app.run()
+    app.run(host='0.0.0.0', port=8000)
