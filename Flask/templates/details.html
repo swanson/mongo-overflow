@@ -80,7 +80,7 @@
                 <a href="/users/{{question.author.id}}">
                     {{ question.author.username }}
                 </a> 
-                <br />@ {{ question.created }}
+                <br />@ {{ question.created|timesince }}
             </div>
         </div>
         <div class="comments">
@@ -91,7 +91,7 @@
                     {{ comment.author.username }}
                 </a> 
  @
-                {{ comment.created }} </li>
+                {{ comment.created|timesince }} </li>
             {% endfor %}
             <li class="comment">
             <div class="form-submit-small" style="float:left;">
@@ -125,14 +125,14 @@ font-size:80%; padding-top:2px;"/>
                 <a href="/users/{{answer.author.id}}">
                     {{ answer.author.username }}
                 </a> 
-                <br />@ {{ answer.created }}
+                <br />@ {{ answer.created|timesince }}
             </div>
             <div class="comments">
                 <ul>
                 {% for comment in answer.comments %}
                     <li>
                     {{ comment.body }} - {{ comment.author.username }} @
-                    {{ comment.created }} </li>
+                    {{ comment.created|timesince }} </li>
                 {% endfor %}
                 </ul>
             </div>
