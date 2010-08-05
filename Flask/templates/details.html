@@ -51,7 +51,7 @@
   setVoteColor();
   </script>
   {% for vote in question.votes %}
-    {% if user == vote.user %}
+    {% if user == g.user %}
         you have voted for this question already
     {% endif %}
   {% endfor %}
@@ -80,7 +80,7 @@
                 <a href="/users/{{question.author.id}}">
                     {{ question.author.username }}
                 </a> 
-                <br />@ {{ question.created|date:"jS F Y H:i" }}
+                <br />@ {{ question.created }}
             </div>
         </div>
         <div class="comments">
@@ -91,7 +91,7 @@
                     {{ comment.author.username }}
                 </a> 
  @
-                {{ comment.created|date:"jS F Y H:i" }} </li>
+                {{ comment.created }} </li>
             {% endfor %}
             <li class="comment">
             <div class="form-submit-small" style="float:left;">
@@ -125,14 +125,14 @@ font-size:80%; padding-top:2px;"/>
                 <a href="/users/{{answer.author.id}}">
                     {{ answer.author.username }}
                 </a> 
-                <br />@ {{ answer.created|date:"jS F Y H:i" }}
+                <br />@ {{ answer.created }}
             </div>
             <div class="comments">
                 <ul>
                 {% for comment in answer.comments %}
                     <li>
                     {{ comment.body }} - {{ comment.author.username }} @
-                    {{ comment.created|date:"jS F Y H:i" }} </li>
+                    {{ comment.created }} </li>
                 {% endfor %}
                 </ul>
             </div>
@@ -140,12 +140,12 @@ font-size:80%; padding-top:2px;"/>
     {% endfor %}
 </div>
 <div style="float:left;">
-<h3>Your Answer</h3>
-<form action="" method="post">
-    {{ answer_form }}
-    <div class="form-submit">
-        <input type="submit" value="Post an Answer" style="display:block;"/>
-    </div>
+{% from "_formhelpers.html" import render_field %}
+<form method="POST" action=".">
+  <dl>
+    {{ render_field(answer_form.answer_body) }}
+  </dl>
+  <p><div class="form-submit"><input type=submit value="Post an Answer"></div>
 </form>
 </div>
 

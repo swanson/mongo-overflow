@@ -1,6 +1,6 @@
 from flask import Flask, g, session, request, render_template, flash, redirect, url_for
 from flaskext.openid import OpenID
-from db.documents import User, Question, QuestionInputForm
+from db.documents import User, Question, Answer, QuestionInputForm, AnswerInputForm
 from mongoengine import *
 
 app = Flask(__name__)
@@ -22,9 +22,23 @@ def lookup_current_user():
 def index():
     return render_template('index.html', questions = Question.objects, title = 'Home')
 
-@app.route('/questions/<id>/')
+@app.route('/questions/<id>/', methods = ['POST', 'GET'])
 def question_details(id):
-    return "question details"
+    question = Question.objects.get(id = id)
+    answer_form = AnswerInputForm(request.form)
+    if request.method == 'GET':
+        pass
+    if request.method == 'POST' and answer_form.validate():
+        if g.user:
+            new_answer = Answer(body = answer_form.answer_body.data, author = g.user)
+            new_answer.save()
+            question.answers.append(new_answer)
+            question.save()
+            return redirect('/questions/%s' % question.id) #avoid double POSTs
+
+    return render_template('details.html', question = question, 
+                                            title = question.title,
+                                            answer_form = answer_form)
 
 @app.route('/questions/ask/', methods=['POST', 'GET'])
 def ask_question():
