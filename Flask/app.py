@@ -1,6 +1,6 @@
 from flask import Flask, g, session, request, render_template, flash, redirect, url_for
 from flaskext.openid import OpenID
-from db.documents import User
+from db.documents import User, Question
 from mongoengine import *
 
 app = Flask(__name__)
@@ -20,17 +20,17 @@ def lookup_current_user():
 @app.route('/')
 @app.route('/questions/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', questions = Question.objects, title = 'Home')
 
-@app.route('/questions/<id>')
+@app.route('/questions/<id>/')
 def question_details(id):
     return "question details"
 
-@app.route('/questions/ask')
+@app.route('/questions/ask/')
 def ask_question():
     return "ask"
 
-@app.route('/questions/unanswered')
+@app.route('/questions/unanswered/')
 def unanswered_questions():
     return "unanswered"
 
@@ -38,15 +38,15 @@ def unanswered_questions():
 def user_list():
     return "all users"
 
-@app.route('/users/<id>')
+@app.route('/users/<id>/')
 def user_details(id):
     return "user details"
 
-@app.route('/posts/<id>/vote/<int:value>')
+@app.route('/posts/<id>/vote/<int:value>/')
 def vote(id, value):
     return "vote"
 
-@app.route('/login', methods = ['GET', 'POST'])
+@app.route('/login/', methods = ['GET', 'POST'])
 @oid.loginhandler
 def login():
     if g.user is not None:
@@ -71,25 +71,28 @@ def create_or_login(response):
             name = response.fullname or response.nickname, \
             email = response.email))
 
-@app.route('/create-profile', methods = ['GET', 'POST'])
+@app.route('/create-profile/', methods = ['GET', 'POST'])
 def create_profile():
     if g.user is not None or 'openid' not in session:
         return redirect(url_for('index'))
     if request.method == 'POST':
         name = request.form['name']
         email = request.form['email']
+        username = request.form['username']
         if not name:
             flash(u'Error: you have to provide a name')
+        elif not username:
+            flash(u'Error: you must provide a username')
         elif '@' not in email:
             flash(u'Error: you have to enter a valid email address')
         else:
             flash(u'Profile successfully created')
-            new_user = User(username = name, email = email, openid = session['openid'])
+            new_user = User(username = username, name = name, email = email, openid = session['openid'])
             new_user.save()
             return redirect(oid.get_next_url())
     return render_template('create_profile.html', next_url=oid.get_next_url())
 
-@app.route('/logout')
+@app.route('/logout/')
 def logout():
     session.pop('openid', None)
     flash('You were signed out')

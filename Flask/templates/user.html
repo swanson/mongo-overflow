@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>{{ title }}</h2>
+<div>
+    Email: {{ user_to_show.email }} <br />
+    Rep: {{ user_to_show.rep }} <br />
+    Avatar: {{ user_to_show.avatar }} <br />
+    Last logged in: {{ user_to_show.last_login }} <br />
+    Joined: {{ user_to_show.date_joined }} <br />
+
+</div>
+{% endblock %}

@@ -2,6 +2,7 @@ from mongoengine import * #tsk tsk...what would PEP say?!
 from datetime import datetime
 
 class User(Document):
+    name = StringField(required = True)
     username = StringField(required = True)
     email = StringField(required = True)
     openid = StringField(required = True)

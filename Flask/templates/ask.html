@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="float:left; width: 100%;">
+<h2> {{ title }} </h2>
+<form action="" method="post">
+    <table>
+        {{ form }}
+        <tr>
+            <th></th><td><input type="submit" value="Post Your Question" /></td>
+        </tr>
+    </table>
+</form>
+</div>
+{% endblock %}
