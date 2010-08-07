@@ -1,6 +1,7 @@
 from flask import Flask, g, session, request, render_template, flash, redirect, url_for
 from flaskext.openid import OpenID
-from db.documents import User, Question, Answer, QuestionInputForm, AnswerInputForm
+from db.documents import User, Question, Answer, Comment
+from db.forms import QuestionForm, AnswerForm, CommentForm
 from mongoengine import *
 from datetime import datetime
 
@@ -54,10 +55,18 @@ def index():
 @app.route('/questions/<id>/', methods = ['POST', 'GET'])
 def question_details(id):
     question = Question.objects.get(id = id)
-    answer_form = AnswerInputForm(request.form)
+    answer_form = AnswerForm(request.form)
+    comment_form = CommentForm(request.form)
     if request.method == 'GET':
         pass
-    if request.method == 'POST' and answer_form.validate():
+    elif request.method == 'POST' and comment_form.validate():
+        if g.user:
+            new_comment = Comment(body = comment_form.comment_body.data, author = g.user)
+            new_comment.save()
+            question.comments.append(new_comment)
+            question.save()
+            return redirect('/questions/%s' % question.id) #avoid double POSTs
+    elif request.method == 'POST' and answer_form.validate():
         if g.user:
             new_answer = Answer(body = answer_form.answer_body.data, author = g.user)
             new_answer.save()
@@ -67,11 +76,12 @@ def question_details(id):
 
     return render_template('details.html', question = question, 
                                             title = question.title,
-                                            answer_form = answer_form)
+                                            answer_form = answer_form,
+                                            comment_form = comment_form)
 
 @app.route('/questions/ask/', methods=['POST', 'GET'])
 def ask_question():
-    form = QuestionInputForm(request.form)
+    form = QuestionForm(request.form)
     if request.method == 'POST' and form.validate():
         title = form.title.data
         body = form.body.data
@@ -146,7 +156,8 @@ def create_profile():
             flash(u'Error: you have to enter a valid email address')
         else:
             flash(u'Profile successfully created')
-            new_user = User(username = username, name = name, email = email, openid = session['openid'])
+            new_user = User(username = username, name = name, email = email, \
+                    openid = session['openid'])
             new_user.save()
             return redirect(oid.get_next_url())
     return render_template('create_profile.html', next_url=oid.get_next_url())

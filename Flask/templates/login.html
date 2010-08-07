@@ -1,12 +1,12 @@
-{% extends "layout.html" %}
+{% extends "base.html" %}
 {% block title %}Sign in{% endblock %}
-{% block body %}
+{% block content %}
   <h2>Sign in</h2>
   <form action="" method=post>
     {% if error %}<p class=error><strong>Error:</strong> {{ error }}</p>{% endif %}
     <p>
       OpenID:
-      <input type=text name=openid size=30>
+      <input type=text name=openid size=30 value="https://www.google.com/accounts/o8/id">
       <input type=submit value="Sign in">
       <input type=hidden name=next value="{{ next }}">
   </form>

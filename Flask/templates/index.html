@@ -33,7 +33,7 @@
                 {% endfor %}
                 </div>
             {% endif %}
-            <div class="activity">{{question.created}}
+            <div class="activity">{{question.created|timesince}}
                 <a href='/users/{{ question.author.id }}'>{{ question.author.username }}</a>
                                     {{ question.author.rep }}
                                 </div>

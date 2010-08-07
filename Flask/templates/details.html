@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% from "_formhelpers.html" import render_field %}
 {% block content %}
 <script>
   function vote(kind) {
@@ -96,7 +96,7 @@
             <li class="comment">
             <div class="form-submit-small" style="float:left;">
                 <form action="" method="post" style="float:left; width:100%;">
-                {{ comment_form }}
+                    {{ render_field(comment_form.comment_body) }}
                     <input type="submit" value="Add a comment" 
                     style="background-color:#5AAF4B; color:#ffffff;
 font-size:80%; padding-top:2px;"/>
@@ -140,7 +140,7 @@ font-size:80%; padding-top:2px;"/>
     {% endfor %}
 </div>
 <div style="float:left;">
-{% from "_formhelpers.html" import render_field %}
+
 <form method="POST" action=".">
   <dl>
     {{ render_field(answer_form.answer_body) }}
