@@ -92,20 +92,15 @@
                 </a> 
  @
                 {{ comment.created|timesince }} </li>
-            {% endfor %}
-            <li class="comment">
+                {% endfor %}
+             </ul>
             <div class="form-submit-small" style="float:left;">
                 <form action="" method="post" style="float:left; width:100%;">
-                    {{ render_field(comment_form.comment_body) }}
-                    <input type="submit" value="Add a comment" 
-                    style="background-color:#5AAF4B; color:#ffffff;
-font-size:80%; padding-top:2px;"/>
+                    <textarea class="comment-entry" id="comment_body" 
+                        name="comment_body"></textarea>
+                    <input class="comment-button" type="submit" value="Add a comment"/>
                 </form>
-            </li>
-        </ul>
-    </div>
-        <br />
-        <br />
+            </div>
     </div>    
 <div class='answers-div'>
     <h3>{{ question.answers|length }} Answer(s)</h3>
@@ -140,11 +135,10 @@ font-size:80%; padding-top:2px;"/>
     {% endfor %}
 </div>
 <div style="float:left;">
-
 <form method="POST" action=".">
-  <dl>
-    {{ render_field(answer_form.answer_body) }}
-  </dl>
+    <h3>Your Answer</h3>
+    <textarea class="answer-entry" id="answer_body" 
+                        name="answer_body"></textarea>
   <p><div class="form-submit"><input type=submit value="Post an Answer"></div>
 </form>
 </div>

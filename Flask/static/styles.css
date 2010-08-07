@@ -125,6 +125,20 @@ li.comment {
     border-top-width:1px
 }
 
+.comment-button {
+    background-color:#5AAF4B;
+    color:#ffffff;
+    font-size:80%;
+    float:right;
+}
+
+.comment-button {
+    background-color:#5AAF4B;
+    color:#ffffff;
+    font-size:80%;
+    float:right;
+}
+
 .form-submit input {
     border-bottom-color:#888888;
     border-bottom-style:solid;
@@ -165,8 +179,8 @@ li.comment {
     border-top-width:1px;
     margin-bottom:3px;
     margin-right:3px;
-    margin-top:3px;
-    margin-left:2px;
+    margin-top:1px;
+    margin-left:10px;
     padding-bottom:2px;
     padding-left:2px;
     padding-right:2px;
@@ -295,4 +309,15 @@ li.comment {
     color:red;
     font-weight:bold;
     font-size:200%;
+}
+
+.comment-entry {
+    width:600px;
+    float:left;
+}
+
+.answer-entry {
+    width:400px;
+    height:150px;
+    float:left;
 }
