@@ -3,14 +3,14 @@
 {% block content %}
 <script>
   function vote(kind) {
-      $.getJSON("/vote/", { qid:"{{ question.id }}", vote: kind }, function(json){
-        $("#vote-count").text(json['count']);
-        if (json['vote'] == 1)
+      $.post("/posts/" + "{{ question.id }}" + "/vote/" + kind + "/", {}, function(data){
+        $("#vote-count").text(data['count']);
+        if (data['vote'] == 1)
         {
             $("#upvote").removeClass().addClass("voted_up");
             $("#downvote").removeClass().addClass("no_vote");
         }
-        else if (json['vote'] == -1)
+        else if (data['vote'] == -1)
         {
             $("#downvote").removeClass().addClass("voted_down");
             $("#upvote").removeClass().addClass("no_vote");
@@ -20,35 +20,14 @@
             $("#upvote").removeClass().addClass("no_vote");
             $("#downvote").removeClass().addClass("no_vote");
         }
-
-    });
+    }, "json");
   }
   function addClickHandlers() {
-    $("#upvote").click( function() { vote("up") });
-    $("#downvote").click( function() { vote("down") });
+    $("#upvote").click( function() { vote("1"); return false; });
+    $("#downvote").click( function() { vote("2"); return false; });
 }
 
-  function setVoteColor() {
-      $.getJSON("/vote_color/", {qid:"{{ question.id }}"}, function(json){
-        if (json['vote'] == 1)
-        {
-            $("#upvote").removeClass().addClass("voted_up");
-            $("#downvote").removeClass().addClass("no_vote");
-        }
-        else if (json['vote'] == -1)
-        {
-            $("#downvote").removeClass().addClass("voted_down");
-            $("#upvote").removeClass().addClass("no_vote");
-        }
-        else
-        {
-            $("#upvote").removeClass().addClass("no_vote");
-            $("#downvote").removeClass().addClass("no_vote");
-        }
-    });
-  }
   $(document).ready(addClickHandlers);
-  setVoteColor();
   </script>
   {% for vote in question.votes %}
     {% if user == g.user %}

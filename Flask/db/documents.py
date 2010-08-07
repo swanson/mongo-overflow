@@ -34,6 +34,42 @@ class Question(Document):
     tags = ListField(StringField(max_length = 50, default = lambda : []))
     author = ReferenceField(User)
 
+    def vote_up(self, user):
+        try:
+            your_vote = Vote.objects.get(question = self, user = user)
+            if your_vote.score == -1:
+                your_vote.score = 1
+                your_vote.save()
+                Question.objects(id=self.id).update_one(inc__score=2)
+            elif your_vote.score == 1:
+                your_vote.delete()
+                Question.objects(id=self.id).update_one(dec__score=1)
+                return 0
+        except:
+            vote = Vote(question = self, user = user, score = 1)
+            vote.save()
+            Question.objects(id=self.id).update_one(inc__score=1)
+        return 1
+
+
+    def vote_down(self, user):
+        try:
+            your_vote = Vote.objects.get(question = self, user = user)
+            if your_vote.score == 1:
+                your_vote.score = -1
+                your_vote.save()
+                Question.objects(id=self.id).update_one(dec__score=2)
+            elif your_vote.score == -1:
+                your_vote.delete()
+                Question.objects(id=self.id).update_one(inc__score=1)
+                return 0
+        except:
+            vote = Vote(question = self, user = user, score = -1)
+            vote.save()
+            Question.objects(id=self.id).update_one(dec__score=1)
+        return -1
+
+
 class Vote(Document):
     user = ReferenceField(User, required = True)
     score = IntField(required = True, default = 0)

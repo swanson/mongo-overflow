@@ -1,9 +1,10 @@
-from flask import Flask, g, session, request, render_template, flash, redirect, url_for
+from flask import Flask, g, session, request, render_template, flash, redirect, url_for, jsonify
 from flaskext.openid import OpenID
 from db.documents import User, Question, Answer, Comment
 from db.forms import QuestionForm, AnswerForm, CommentForm
 from mongoengine import *
 from datetime import datetime
+import json
 
 
 app = Flask(__name__)
@@ -111,9 +112,17 @@ def user_list():
 def user_details(id):
     return "user details"
 
-@app.route('/posts/<id>/vote/<int:value>/')
+@app.route('/posts/<id>/vote/<int:value>/', methods = ['POST'])
 def vote(id, value):
-    return "vote"
+    if g.user:
+        question = Question.objects.get(id = id)
+        if value is 1:
+            v = question.vote_up(g.user)
+        elif value is 2:
+            v = question.vote_down(g.user)
+        question.reload()
+        return jsonify(success = True, count = question.score, vote = v)
+    return jsonify(success = False)
 
 @app.route('/login/', methods = ['GET', 'POST'])
 @oid.loginhandler
