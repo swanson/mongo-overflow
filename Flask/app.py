@@ -51,7 +51,7 @@ def lookup_current_user():
 @app.route('/')
 @app.route('/questions/')
 def index():
-    return render_template('index.html', questions = Question.objects, title = 'Home')
+    return render_template('index.html', questions = Question.objects, title = 'All Questions')
 
 @app.route('/questions/<id>/', methods = ['POST', 'GET'])
 def question_details(id):
@@ -110,7 +110,8 @@ def ask_question():
 
 @app.route('/questions/unanswered/')
 def unanswered_questions():
-    return "unanswered"
+    return render_template('index.html', questions = Question.objects(answers__size = 0), 
+                                        title = 'Unanswered Questions')
 
 @app.route('/users/')
 def user_list():
