@@ -25,6 +25,9 @@ class Comment(Response):
 class Answer(Response):
     comments = ListField(ReferenceField(Comment), default = lambda : [])
 
+    def __cmp__(self, other):
+        return cmp(self.score, other.score)
+
     def vote_up(self, user):
         try:
             your_vote = AnswerVote.objects.get(answer = self, user = user)

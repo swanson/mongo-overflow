@@ -131,7 +131,7 @@
     </div>    
 <div class='answers-div'>
     <h3>{{ question.answers|length }} Answer(s)</h3>
-    {% for answer in question.answers %}
+    {% for answer in question.answers|sort(True) %}
     <div id="{{answer.id}}" class='voting-block'>
         <span class="{{answer.id}} upvote_answer no_vote">▲</span>
         <br /><span class="{{answer.id}} vote-count no_vote">{{answer.score}}</span><br />
