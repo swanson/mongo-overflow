@@ -33,9 +33,12 @@
   function addClickHandlers() {
     $("#upvote").click( function() { vote("1"); return false; });
     $("#downvote").click( function() { vote("2"); return false; });
+    $("#comment-show").click( function() { $(this).hide("fast").prev().show("fast");});
   }
 
   function pageSetup() {
+        $('<span id="comment-show">Add a comment...</span>').insertAfter("#comment-form");
+        $("#comment-form").hide();
         addClickHandlers();
         colorizeArrows({{your_vote}});
   }
@@ -81,8 +84,9 @@
                 {{ comment.created|timesince }} </li>
                 {% endfor %}
              </ul>
-            <div class="form-submit-small" style="float:left;">
-                <form action="" method="post" style="float:left; width:100%;">
+            <div class="form-submit-small" id="comment-form" style="float:left;">
+                <form action="/posts/question/{{question.id}}/comment/" method="post" 
+                    style="float:left; width:100%;">
                     <textarea class="comment-entry" id="comment_body" 
                         name="comment_body"></textarea>
                     <input class="comment-button" type="submit" value="Add a comment"/>
@@ -122,7 +126,7 @@
     {% endfor %}
 </div>
 <div style="float:left;">
-<form method="POST" action=".">
+    <form method="POST" action="/posts/question/{{question.id}}/answer/">
     <h3>Your Answer</h3>
     <textarea class="answer-entry" id="answer_body" 
                         name="answer_body"></textarea>

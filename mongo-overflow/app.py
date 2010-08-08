@@ -53,11 +53,11 @@ def lookup_current_user():
 def index():
     return render_template('index.html', questions = Question.objects, title = 'All Questions')
 
-@app.route('/questions/<id>/', methods = ['POST', 'GET'])
+@app.route('/questions/<id>/', methods = ['GET'])
 def question_details(id):
     question = Question.objects.get(id = id)
-    answer_form = AnswerForm(request.form)
-    comment_form = CommentForm(request.form)
+    answer_form = AnswerForm()
+    comment_form = CommentForm()
     your_vote = 0
     if g.user:
         try:
@@ -65,23 +65,6 @@ def question_details(id):
             your_vote = vote.score
         except:
             pass
-    if request.method == 'GET':
-        pass
-    elif request.method == 'POST' and comment_form.validate():
-        if g.user:
-            new_comment = Comment(body = comment_form.comment_body.data, author = g.user)
-            new_comment.save()
-            question.comments.append(new_comment)
-            question.save()
-            return redirect('/questions/%s' % question.id) #avoid double POSTs
-    elif request.method == 'POST' and answer_form.validate():
-        if g.user:
-            new_answer = Answer(body = answer_form.answer_body.data, author = g.user)
-            new_answer.save()
-            question.answers.append(new_answer)
-            question.save()
-            return redirect('/questions/%s' % question.id) #avoid double POSTs
-
     return render_template('details.html', question = question, 
                                             title = question.title,
                                             answer_form = answer_form,
@@ -132,6 +115,49 @@ def user_details(id):
     return render_template('user.html', title = "%s's Profile" % user.username, 
                                         user = user,
                                         avatar = get_gravatar(user.email))
+
+@app.route('/posts/question/<id>/comment/', methods = ['POST'])
+def comment_question(id):
+    comment_form = CommentForm(request.form)
+    if g.user and comment_form.validate():
+        question = Question.objects.get(id = id)
+        new_comment = Comment(body = comment_form.comment_body.data, author = g.user)
+        new_comment.save()
+        question.comments.append(new_comment)
+        question.save()
+        return redirect('/questions/%s' % id) #avoid double POSTs
+    else:
+        #add error handling
+        return redirect('/questions/%s' % id) #avoid double POSTs
+
+@app.route('/posts/question/<id>/answer/', methods = ['POST'])
+def add_answer(id):
+    answer_form = AnswerForm(request.form)
+    if g.user and answer_form.validate():
+        question = Question.objects.get(id = id)
+        new_answer = Answer(body = answer_form.answer_body.data, author = g.user)
+        new_answer.save()
+        question.answers.append(new_answer)
+        question.save()
+        return redirect('/questions/%s' % id) #avoid double POSTs
+    else:
+        #add error handling
+        return redirect('/questions/%s' % id) #avoid double POSTs
+
+#@app.route('/posts/question/<id>/answer/<answer_id>/comment/', methods = ['POST'])
+def comment_answer(id, answer_id):
+    comment_form = CommentForm(request.form)
+    if g.user and comment_form.validate():
+        answer = Answer.objects.get(id = answer_id)
+        new_comment = Comment(body = comment_form.comment_body.data, author = g.user)
+        new_comment.save()
+        answer.comments.append(new_comment)
+        answer.save()
+        return redirect('/questions/%s' % id) #avoid double POSTs
+    else:
+        #add error handling
+        return redirect('/questions/%s' % id) #avoid double POSTs
+
 
 @app.route('/posts/<id>/vote/<int:value>/', methods = ['POST'])
 def vote(id, value):
