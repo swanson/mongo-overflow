@@ -1,6 +1,6 @@
 from flask import Flask, g, session, request, render_template, flash, redirect, url_for, jsonify
 from flaskext.openid import OpenID
-from db.documents import User, Question, Answer, Comment, Vote
+from db.documents import User, Question, Answer, Comment, Vote, AnswerVote
 from db.forms import QuestionForm, AnswerForm, CommentForm
 from mongoengine import *
 from datetime import datetime
@@ -59,17 +59,23 @@ def question_details(id):
     answer_form = AnswerForm()
     comment_form = CommentForm()
     your_vote = 0
+    answer_votes = []
     if g.user:
         try:
             vote = Vote.objects.get(user=g.user, question=question)
             your_vote = vote.score
         except:
             pass
+        try:
+            answer_votes = AnswerVote.objects(user=g.user, answer__in=question.answers)
+        except:
+            pass
     return render_template('details.html', question = question, 
                                             title = question.title,
                                             answer_form = answer_form,
                                             comment_form = comment_form,
-                                            your_vote = your_vote)
+                                            your_vote = your_vote,
+                                            answer_votes = answer_votes)
 
 @app.route('/questions/ask/', methods=['POST', 'GET'])
 def ask_question():
@@ -117,7 +123,7 @@ def user_details(id):
                                         avatar = get_gravatar(user.email))
 
 @app.route('/posts/question/<id>/comment/', methods = ['POST'])
-def comment_question(id):
+def add_comment_to_question(id):
     comment_form = CommentForm(request.form)
     if g.user and comment_form.validate():
         question = Question.objects.get(id = id)
@@ -131,7 +137,7 @@ def comment_question(id):
         return redirect('/questions/%s' % id) #avoid double POSTs
 
 @app.route('/posts/question/<id>/answer/', methods = ['POST'])
-def add_answer(id):
+def add_answer_to_question(id):
     answer_form = AnswerForm(request.form)
     if g.user and answer_form.validate():
         question = Question.objects.get(id = id)
@@ -145,7 +151,7 @@ def add_answer(id):
         return redirect('/questions/%s' % id) #avoid double POSTs
 
 @app.route('/posts/question/<id>/answer/<answer_id>/comment/', methods = ['POST'])
-def comment_answer(id, answer_id):
+def add_comment_to_answer(id, answer_id):
     comment_form = CommentForm(request.form)
     if g.user and comment_form.validate():
         answer = Answer.objects.get(id = answer_id)
@@ -159,8 +165,8 @@ def comment_answer(id, answer_id):
         return redirect('/questions/%s' % id) #avoid double POSTs
 
 
-@app.route('/posts/<id>/vote/<int:value>/', methods = ['POST'])
-def vote(id, value):
+@app.route('/posts/question/<id>/vote/<int:value>/', methods = ['POST'])
+def vote_on_question(id, value):
     if g.user:
         question = Question.objects.get(id = id)
         if value is 1:
@@ -170,6 +176,19 @@ def vote(id, value):
         question.reload()
         return jsonify(success = True, count = question.score, vote = v)
     return jsonify(success = False)
+
+@app.route('/posts/answer/<id>/vote/<int:value>/', methods = ['POST'])
+def vote_on_answer(id, value):
+    if g.user:
+        answer = Answer.objects.get(id = id)
+        if value is 1:
+            v = answer.vote_up(g.user)
+        elif value is 2:
+            v = answer.vote_down(g.user)
+        answer.reload()
+        return jsonify(success = True, count = answer.score, vote = v)
+    return jsonify(success = False)
+
 
 @app.route('/login/', methods = ['GET', 'POST'])
 @oid.loginhandler

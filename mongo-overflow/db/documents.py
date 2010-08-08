@@ -25,6 +25,47 @@ class Comment(Response):
 class Answer(Response):
     comments = ListField(ReferenceField(Comment), default = lambda : [])
 
+    def vote_up(self, user):
+        try:
+            your_vote = AnswerVote.objects.get(answer = self, user = user)
+            if your_vote.score == -1:
+                your_vote.score = 1
+                your_vote.save()
+                Answer.objects(id=self.id).update_one(inc__score=2)
+                User.objects(id = self.author.id).update_one(inc__rep=20)
+            elif your_vote.score == 1:
+                your_vote.delete()
+                Answer.objects(id=self.id).update_one(dec__score=1)
+                User.objects(id = self.author.id).update_one(dec__rep=10)
+                return 0
+        except:
+            vote = AnswerVote(answer = self, user = user, score = 1)
+            vote.save()
+            Answer.objects(id=self.id).update_one(inc__score=1)
+            User.objects(id = self.author.id).update_one(inc__rep=10)
+        return 1
+
+
+    def vote_down(self, user):
+        try:
+            your_vote = AnswerVote.objects.get(answer = self, user = user)
+            if your_vote.score == 1:
+                your_vote.score = -1
+                your_vote.save()
+                Answer.objects(id=self.id).update_one(dec__score=2)
+                User.objects(id = self.author.id).update_one(dec__rep=20)
+            elif your_vote.score == -1:
+                your_vote.delete()
+                Answer.objects(id=self.id).update_one(inc__score=1)
+                User.objects(id = self.author.id).update_one(inc__rep=10)
+                return 0
+        except:
+            vote = AnswerVote(answer = self, user = user, score = -1)
+            vote.save()
+            Answer.objects(id=self.id).update_one(dec__score=1)
+            User.objects(id = self.author.id).update_one(dec__rep=10)
+        return -1
+
 class Question(Document):
     title = StringField(required = True)
     body = StringField(required = True)
@@ -82,3 +123,9 @@ class Vote(Document):
     user = ReferenceField(User, required = True)
     score = IntField(required = True, default = 0)
     question = ReferenceField(Question, required = True)
+
+class AnswerVote(Document):
+    user = ReferenceField(User, required = True)
+    score = IntField(required = True, default = 0)
+    answer = ReferenceField(Answer, required = True)
+
