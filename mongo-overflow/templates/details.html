@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+{% from "_formhelpers.html" import render_field %}
+{% block content %}
+<script>
+  function vote(kind) {
+      $.post("/posts/" + "{{ question.id }}" + "/vote/" + kind + "/", {}, 
+      function(data)
+      {
+        $("#vote-count").text(data['count']);
+        colorizeArrows(data['vote'])
+      }, "json");
+  }
+
+  function colorizeArrows(vote)
+  {
+        if (vote == 1)
+        {
+            $("#upvote").removeClass().addClass("voted_up");
+            $("#downvote").removeClass().addClass("no_vote");
+        }
+        else if (vote == -1)
+        {
+            $("#downvote").removeClass().addClass("voted_down");
+            $("#upvote").removeClass().addClass("no_vote");
+        }
+        else
+        {
+            $("#upvote").removeClass().addClass("no_vote");
+            $("#downvote").removeClass().addClass("no_vote");
+        }
+  }
+
+  function addClickHandlers() {
+    $("#upvote").click( function() { vote("1"); return false; });
+    $("#downvote").click( function() { vote("2"); return false; });
+  }
+
+  function pageSetup() {
+        addClickHandlers();
+        colorizeArrows({{your_vote}});
+  }
+
+    $(document).ready(pageSetup);
+  </script>
+
+  <div style="width: 100%;">
+    <div class='voting-block'>
+        <span id="upvote" class="no_vote">▲</span>
+        <br /><span id="vote-count" class="no_vote">{{question.score}}</span><br />
+        <span id="downvote" class="no_vote">▼</span>
+    </div>
+    <div class='question-div'>
+        <div class='question-body'>
+            <h2>{{ question.title }}</h2>
+            {{ question.body }} <br />
+            {% if question.tags %}
+                <div class="tags">
+                {% for tag in question.tags %}
+                    <a class="post-tag" href="#">{{ tag }}</a>
+                {% endfor %}
+            </div>
+            {% endif %}
+             </br>
+        </div>
+            <div class="posted-by">
+                By: 
+                <a href="/users/{{question.author.id}}">
+                    {{ question.author.username }}
+                </a> 
+                <br />@ {{ question.created|timesince }}
+            </div>
+        </div>
+        <div class="comments">
+            <ul>
+            {% for comment in question.comments %}
+                <li class="comment">
+                {{ comment.body }} -<a href="/users/{{comment.author.id}}">
+                    {{ comment.author.username }}
+                </a> 
+ @
+                {{ comment.created|timesince }} </li>
+                {% endfor %}
+             </ul>
+            <div class="form-submit-small" style="float:left;">
+                <form action="" method="post" style="float:left; width:100%;">
+                    <textarea class="comment-entry" id="comment_body" 
+                        name="comment_body"></textarea>
+                    <input class="comment-button" type="submit" value="Add a comment"/>
+                </form>
+            </div>
+    </div>    
+<div class='answers-div'>
+    <h3>{{ question.answers|length }} Answer(s)</h3>
+    {% for answer in question.answers %}
+    <div class='voting-block'>
+        +
+        <br />{{answer.score}}<br />
+        -
+    </div>
+
+    <div class='answer-content'>
+            <div class='answer-body'>
+                {{ answer.body }} <br />
+            </div>
+            <div class="posted-by">
+                By: 
+                <a href="/users/{{answer.author.id}}">
+                    {{ answer.author.username }}
+                </a> 
+                <br />@ {{ answer.created|timesince }}
+            </div>
+            <div class="comments">
+                <ul>
+                {% for comment in answer.comments %}
+                    <li>
+                    {{ comment.body }} - {{ comment.author.username }} @
+                    {{ comment.created|timesince }} </li>
+                {% endfor %}
+                </ul>
+            </div>
+    </div>
+    {% endfor %}
+</div>
+<div style="float:left;">
+<form method="POST" action=".">
+    <h3>Your Answer</h3>
+    <textarea class="answer-entry" id="answer_body" 
+                        name="answer_body"></textarea>
+  <p><div class="form-submit"><input type=submit value="Post an Answer"></div>
+</form>
+</div>
+
+</div>
+{% endblock %}

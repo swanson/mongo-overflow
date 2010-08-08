@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>{{ title }}</h2>
+<div>
+    {{ avatar|safe }} <br />
+    Email: {{ user.email }} <br />
+    Rep: {{ user.rep }} <br />
+    Last logged in: {{ user.last_login|timesince }} <br />
+    Joined: {{ user.joined|timesince }} <br />
+
+</div>
+{% endblock %}
