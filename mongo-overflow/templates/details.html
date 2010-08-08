@@ -111,7 +111,8 @@
             {% endif %}
              </br>
         </div>
-            <div class="posted-by">
+        <div class="posted-by">
+            {{ question.author.get_gravatar()|safe }} <br/>
                 By: 
                 <a href="/users/{{question.author.id}}">
                     {{ question.author.username }}
@@ -153,6 +154,7 @@
                 {{ answer.body }} <br />
             </div>
             <div class="posted-by">
+                {{ answer.author.get_gravatar()|safe }} <br/>
                 By: 
                 <a href="/users/{{answer.author.id}}">
                     {{ answer.author.username }}

@@ -1,6 +1,6 @@
 from mongoengine import * #tsk tsk...what would PEP say?!
 from datetime import datetime
-
+import urllib2, hashlib
 
 class User(Document):
     name = StringField(required = True)
@@ -11,6 +11,13 @@ class User(Document):
     rep = IntField(required = True, default = 0)
     joined = DateTimeField()
     last_login = DateTimeField()
+
+    def get_gravatar(self, size = 32):
+        html = """<img src="%s"/>"""
+        img_src = "http://www.gravatar.com/avatar/" + hashlib.md5(self.email.lower()).hexdigest()
+        img_src += "?s=%size&d=identicon" % size
+        return html % img_src
+
 
 class Response(Document):
     body = StringField(required = True)

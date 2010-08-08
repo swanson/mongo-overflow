@@ -3,7 +3,8 @@
 {% block content %}
 <h2>{{ title }}</h2>
 <div>
-    {{ avatar|safe }} <br />
+    {{ user.get_gravatar(128)|safe }} <br />
+    Name: {{ user.name }} <br />
     Email: {{ user.email }} <br />
     Rep: {{ user.rep }} <br />
     Last logged in: {{ user.last_login|timesince }} <br />

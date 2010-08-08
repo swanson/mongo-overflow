@@ -4,7 +4,7 @@ from db.documents import User, Question, Answer, Comment, Vote, AnswerVote
 from db.forms import QuestionForm, AnswerForm, CommentForm
 from mongoengine import *
 from datetime import datetime
-import json, urllib2, hashlib
+import json
 
 
 app = Flask(__name__)
@@ -109,18 +109,11 @@ def unanswered_questions():
 def user_list():
     return render_template('user_list.html', title = 'All Users', users = User.objects)
 
-def get_gravatar(email):
-    html = """<img src="%s"/>"""
-    img_src = "http://www.gravatar.com/avatar/" + hashlib.md5(email.lower()).hexdigest()
-    return html % img_src
-
-
 @app.route('/users/<id>/')
 def user_details(id):
     user = User.objects.get(id = id)
     return render_template('user.html', title = "%s's Profile" % user.username, 
-                                        user = user,
-                                        avatar = get_gravatar(user.email))
+                                        user = user)
 
 @app.route('/posts/question/<id>/comment/', methods = ['POST'])
 def add_comment_to_question(id):
@@ -170,7 +163,7 @@ def vote_on_question(id, value):
     if g.user:
         question = Question.objects.get(id = id)
         if question.author == g.user:
-            return jsonify(succes = False, msg = "You can't vote on your own question")
+            return jsonify(success = False, msg = "You can't vote on your own question")
         if value is 1:
             v = question.vote_up(g.user)
         elif value is 2:
@@ -184,7 +177,7 @@ def vote_on_answer(id, value):
     if g.user:
         answer = Answer.objects.get(id = id)
         if answer.author == g.user:
-            return jsonify(succes = False, msg = "You can't vote on your own answer")
+            return jsonify(success = False, msg = "You can't vote on your own answer")
         if value is 1:
             v = answer.vote_up(g.user)
         elif value is 2:
