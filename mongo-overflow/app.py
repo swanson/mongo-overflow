@@ -169,6 +169,8 @@ def add_comment_to_answer(id, answer_id):
 def vote_on_question(id, value):
     if g.user:
         question = Question.objects.get(id = id)
+        if question.author == g.user:
+            return jsonify(succes = False, msg = "You can't vote on your own question")
         if value is 1:
             v = question.vote_up(g.user)
         elif value is 2:
@@ -181,6 +183,8 @@ def vote_on_question(id, value):
 def vote_on_answer(id, value):
     if g.user:
         answer = Answer.objects.get(id = id)
+        if answer.author == g.user:
+            return jsonify(succes = False, msg = "You can't vote on your own answer")
         if value is 1:
             v = answer.vote_up(g.user)
         elif value is 2:

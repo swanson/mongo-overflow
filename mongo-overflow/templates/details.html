@@ -6,6 +6,11 @@
       $.post("/posts/question/" + "{{ question.id }}" + "/vote/" + kind + "/", {}, 
       function(data)
       {
+        if (data['msg'])
+        {
+            alert(data['msg']); //add popup for this
+            return;
+        }
         $(".vote-count").text(data['count']);
         colorizeArrows(data['vote'])
       }, "json");
@@ -15,8 +20,14 @@
       $.post("/posts/answer/" + aid + "/vote/" + kind + "/", {}, 
       function(data)
       {
-          $("#"+aid+">.vote-count").text(data['count']);
-          colorizeAnswerArrows(data['vote'], aid);
+        if (data['msg'])
+        {
+            alert(data['msg']); //add popup for this
+            return;
+        }
+
+        $("#"+aid+">.vote-count").text(data['count']);
+        colorizeAnswerArrows(data['vote'], aid);
       }, "json");
   }
 
