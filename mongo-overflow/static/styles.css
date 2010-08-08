@@ -321,3 +321,33 @@ li.comment {
     height:150px;
     float:left;
 }
+
+/* SimpleModal Styling */
+/* Overlay */
+#simplemodal-overlay {
+    background-color:#000; 
+}
+
+/* Container */
+#simplemodal-container {
+    color:#fff; 
+    height:50px;
+    background-color:#5AAF4B;
+    border:4px solid #3F2917; 
+    padding:12px;
+    font-weight:bold;
+    text-align:center;
+}
+
+#simplemodal-container a.modalCloseImg {
+    background:url(/static/x.png) no-repeat;
+    width:25px;
+    height:29px;
+    display:inline;
+    z-index:3200;
+    position:absolute;
+    top:-15px; 
+    right:-16px;
+    cursor:pointer;
+}
+

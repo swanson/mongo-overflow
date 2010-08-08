@@ -8,7 +8,7 @@
       {
         if (data['msg'])
         {
-            alert(data['msg']); //add popup for this
+            $.modal(data['msg']);
             return;
         }
         $(".vote-count").text(data['count']);
@@ -22,10 +22,9 @@
       {
         if (data['msg'])
         {
-            alert(data['msg']); //add popup for this
+            $.modal(data['msg']);
             return;
         }
-
         $("#"+aid+">.vote-count").text(data['count']);
         colorizeAnswerArrows(data['vote'], aid);
       }, "json");
