@@ -9,6 +9,8 @@ class User(Document):
     openid = StringField(required = True)
     avatar = URLField()
     rep = IntField(required = True, default = 0)
+    joined = DateTimeField()
+    last_login = DateTimeField()
 
 class Response(Document):
     body = StringField(required = True)

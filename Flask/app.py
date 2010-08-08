@@ -4,7 +4,7 @@ from db.documents import User, Question, Answer, Comment, Vote
 from db.forms import QuestionForm, AnswerForm, CommentForm
 from mongoengine import *
 from datetime import datetime
-import json
+import json, urllib2, hashlib
 
 
 app = Flask(__name__)
@@ -91,7 +91,7 @@ def question_details(id):
 @app.route('/questions/ask/', methods=['POST', 'GET'])
 def ask_question():
     form = QuestionForm(request.form)
-    if request.method == 'POST' and form.validate():
+    if request.method == 'POST' and form.validate() and g.user:
         title = form.title.data
         body = form.body.data
         tags = form.tags.data
@@ -104,8 +104,11 @@ def ask_question():
                     tags = tags)
         new_question.save()
         return redirect('/questions/%s' % new_question.id)
+    elif not g.user:
+        flash("Please login")
     elif request.method == 'POST':
         flash("Put it some data please")
+
     return render_template('ask.html', form = form, title = 'Ask a question')
 
 @app.route('/questions/unanswered/')
@@ -115,11 +118,20 @@ def unanswered_questions():
 
 @app.route('/users/')
 def user_list():
-    return "all users"
+    return render_template('user_list.html', title = 'All Users', users = User.objects)
+
+def get_gravatar(email):
+    html = """<img src="%s"/>"""
+    img_src = "http://www.gravatar.com/avatar/" + hashlib.md5(email.lower()).hexdigest()
+    return html % img_src
+
 
 @app.route('/users/<id>/')
 def user_details(id):
-    return "user details"
+    user = User.objects.get(id = id)
+    return render_template('user.html', title = "%s's Profile" % user.username, 
+                                        user = user,
+                                        avatar = get_gravatar(user.email))
 
 @app.route('/posts/<id>/vote/<int:value>/', methods = ['POST'])
 def vote(id, value):
@@ -150,6 +162,8 @@ def create_or_login(response):
     session['openid'] = response.identity_url
     try:
         user = User.objects.get(openid = response.identity_url)
+        user.last_login = datetime.now()
+        user.save()
         flash('Successfully signed in')
         g.user = user
         return redirect(oid.get_next_url())
@@ -175,7 +189,8 @@ def create_profile():
         else:
             flash(u'Profile successfully created')
             new_user = User(username = username, name = name, email = email, \
-                    openid = session['openid'])
+                    openid = session['openid'], joined = datetime.now(), \
+                    last_login = datetime.now())
             new_user.save()
             return redirect(oid.get_next_url())
     return render_template('create_profile.html', next_url=oid.get_next_url())

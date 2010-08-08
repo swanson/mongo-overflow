@@ -12,7 +12,7 @@
         <div class="header" style="width:100%; border-bottom-width: 1px; border-bottom-color:#555555; border-bottom-style:solid;height:130px;">
             <div class='login-panel'>
                 {% if g.user %}
-                Welcome <a href='question/{{g.user.id}}'>{{ g.user.username }}</a>,
+                Welcome <a href='/users/{{g.user.id}}'>{{ g.user.username }}</a>,
                 Your rep is {{g.user.rep}} | <a href='/logout'>Logout</a>
                 {% else %}
                 <a href='/login'>Login</a> | <a href='#'>Register</a>
