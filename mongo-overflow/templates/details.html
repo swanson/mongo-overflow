@@ -33,17 +33,17 @@
   function addClickHandlers() {
     $("#upvote").click( function() { vote("1"); return false; });
     $("#downvote").click( function() { vote("2"); return false; });
-    $("#comment-show").click( function() { $(this).hide("fast").prev().show("fast");});
+    $(".comment-show").click( function() { $(this).hide("fast").prev().show("fast");});
   }
 
   function pageSetup() {
-        $('<span id="comment-show">Add a comment...</span>').insertAfter("#comment-form");
-        $("#comment-form").hide();
+        $('<span class="comment-show">Add a comment...</span>').insertAfter(".comment-form");
+        $(".comment-form").hide();
         addClickHandlers();
         colorizeArrows({{your_vote}});
   }
 
-    $(document).ready(pageSetup);
+  $(document).ready(pageSetup);
   </script>
 
   <div style="width: 100%;">
@@ -84,7 +84,7 @@
                 {{ comment.created|timesince }} </li>
                 {% endfor %}
              </ul>
-            <div class="form-submit-small" id="comment-form" style="float:left;">
+            <div class="form-submit-small comment-form" style="float:left;">
                 <form action="/posts/question/{{question.id}}/comment/" method="post" 
                     style="float:left; width:100%;">
                     <textarea class="comment-entry" id="comment_body" 
@@ -114,14 +114,26 @@
                 <br />@ {{ answer.created|timesince }}
             </div>
             <div class="comments">
-                <ul>
-                {% for comment in answer.comments %}
-                    <li>
-                    {{ comment.body }} - {{ comment.author.username }} @
-                    {{ comment.created|timesince }} </li>
+            <ul>
+            {% for comment in answer.comments %}
+                <li class="comment">
+                {{ comment.body }} -<a href="/users/{{comment.author.id}}">
+                    {{ comment.author.username }}
+                </a> 
+ @
+                {{ comment.created|timesince }} </li>
                 {% endfor %}
-                </ul>
+             </ul>
+            <div class="form-submit-small comment-form" style="float:left;">
+                <form action="/posts/question/{{question.id}}/answer/{{answer.id}}/comment/" 
+                    method="post" 
+                    style="float:left; width:100%;">
+                    <textarea class="comment-entry" id="comment_body" 
+                        name="comment_body"></textarea>
+                    <input class="comment-button" type="submit" value="Add a comment"/>
+                </form>
             </div>
+    </div>    
     </div>
     {% endfor %}
 </div>

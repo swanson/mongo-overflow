@@ -144,7 +144,7 @@ def add_answer(id):
         #add error handling
         return redirect('/questions/%s' % id) #avoid double POSTs
 
-#@app.route('/posts/question/<id>/answer/<answer_id>/comment/', methods = ['POST'])
+@app.route('/posts/question/<id>/answer/<answer_id>/comment/', methods = ['POST'])
 def comment_answer(id, answer_id):
     comment_form = CommentForm(request.form)
     if g.user and comment_form.validate():
