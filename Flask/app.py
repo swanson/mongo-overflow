@@ -1,6 +1,6 @@
 from flask import Flask, g, session, request, render_template, flash, redirect, url_for, jsonify
 from flaskext.openid import OpenID
-from db.documents import User, Question, Answer, Comment
+from db.documents import User, Question, Answer, Comment, Vote
 from db.forms import QuestionForm, AnswerForm, CommentForm
 from mongoengine import *
 from datetime import datetime
@@ -58,6 +58,13 @@ def question_details(id):
     question = Question.objects.get(id = id)
     answer_form = AnswerForm(request.form)
     comment_form = CommentForm(request.form)
+    your_vote = 0
+    if g.user:
+        try:
+            vote = Vote.objects.get(user=g.user, question=question)
+            your_vote = vote.score
+        except:
+            pass
     if request.method == 'GET':
         pass
     elif request.method == 'POST' and comment_form.validate():
@@ -78,7 +85,8 @@ def question_details(id):
     return render_template('details.html', question = question, 
                                             title = question.title,
                                             answer_form = answer_form,
-                                            comment_form = comment_form)
+                                            comment_form = comment_form,
+                                            your_vote = your_vote)
 
 @app.route('/questions/ask/', methods=['POST', 'GET'])
 def ask_question():

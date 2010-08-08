@@ -41,14 +41,17 @@ class Question(Document):
                 your_vote.score = 1
                 your_vote.save()
                 Question.objects(id=self.id).update_one(inc__score=2)
+                User.objects(id = self.author.id).update_one(inc__rep=20)
             elif your_vote.score == 1:
                 your_vote.delete()
                 Question.objects(id=self.id).update_one(dec__score=1)
+                User.objects(id = self.author.id).update_one(dec__rep=10)
                 return 0
         except:
             vote = Vote(question = self, user = user, score = 1)
             vote.save()
             Question.objects(id=self.id).update_one(inc__score=1)
+            User.objects(id = self.author.id).update_one(inc__rep=10)
         return 1
 
 
@@ -59,14 +62,17 @@ class Question(Document):
                 your_vote.score = -1
                 your_vote.save()
                 Question.objects(id=self.id).update_one(dec__score=2)
+                User.objects(id = self.author.id).update_one(dec__rep=20)
             elif your_vote.score == -1:
                 your_vote.delete()
                 Question.objects(id=self.id).update_one(inc__score=1)
+                User.objects(id = self.author.id).update_one(inc__rep=10)
                 return 0
         except:
             vote = Vote(question = self, user = user, score = -1)
             vote.save()
             Question.objects(id=self.id).update_one(dec__score=1)
+            User.objects(id = self.author.id).update_one(dec__rep=10)
         return -1
 
 
