@@ -87,8 +87,7 @@ def ask_question():
         if tags == '':
             tags = []
         else:
-            tags = tags.split(',')
-            tags = [tag.strip() for tag in tags]
+            tags = [tag.strip().replace(' ', '-') for tag in tags.split(',')]
         new_question = Question(title = title, body = body, 
                     author = g.user,
                     tags = tags)
