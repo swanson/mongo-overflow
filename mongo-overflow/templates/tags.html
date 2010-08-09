@@ -5,7 +5,7 @@
 <ul>
 {% for tag in tags %}
     <li>
-        <a class="post-tag" href="#">{{ tag['_id'] }}</a> <b>x {{ tag['value']|int }}</b>
+        <a class="post-tag" href="/questions/tagged/{{ tag['_id'] }}/">{{ tag['_id'] }}</a> <b>x {{ tag['value']|int }}</b>
 {% endfor %}
 </ul>
 {% endblock %}

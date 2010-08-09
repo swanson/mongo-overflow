@@ -111,6 +111,11 @@ def unanswered_questions():
     return render_template('index.html', questions = Question.objects(answers__size = 0), 
                                         title = 'Unanswered Questions')
 
+@app.route('/questions/tagged/<tag>/')
+def questions_by_tag(tag):
+    return render_template('index.html', title = 'Questions tagged with "%s"' % tag, 
+                                        questions = Question.objects(tags__contains=tag))
+
 @app.route('/users/')
 def user_list():
     return render_template('user_list.html', title = 'All Users', users = User.objects)
