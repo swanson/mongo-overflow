@@ -1,6 +1,31 @@
 from mongoengine import * #tsk tsk...what would PEP say?!
 from datetime import datetime
 import urllib2, hashlib
+from pymongo.code import Code
+from pymongo import Connection
+
+
+def map_reduce_tags():
+    map = Code("""
+            function () {
+                this.tags.forEach(function(z) {
+                    emit(z, 1);
+                });
+            }
+        """)
+
+    reduce = Code("""
+            function (key, values) {
+                 var total = 0;
+                 for (var i = 0; i < values.length; i++) {
+                   total += values[i];
+                 }
+                 return total;
+               }
+            """)
+    db = Connection()['flask-test']
+    result = db.question.map_reduce(map, reduce, out = 'tags')
+    return result.find()
 
 class User(Document):
     name = StringField(required = True)

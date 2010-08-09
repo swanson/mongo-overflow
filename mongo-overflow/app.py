@@ -1,6 +1,6 @@
 from flask import Flask, g, session, request, render_template, flash, redirect, url_for, jsonify
 from flaskext.openid import OpenID
-from db.documents import User, Question, Answer, Comment, Vote, AnswerVote
+from db.documents import User, Question, Answer, Comment, Vote, AnswerVote, map_reduce_tags
 from db.forms import QuestionForm, AnswerForm, CommentForm
 from mongoengine import *
 from datetime import datetime
@@ -88,6 +88,7 @@ def ask_question():
             tags = []
         else:
             tags = tags.split(',')
+            tags = [tag.strip() for tag in tags]
         new_question = Question(title = title, body = body, 
                     author = g.user,
                     tags = tags)
@@ -99,6 +100,11 @@ def ask_question():
         flash("Put it some data please")
 
     return render_template('ask.html', form = form, title = 'Ask a question')
+
+@app.route('/tags/')
+def get_tags():
+    return render_template('tags.html', title = 'Tags', tags = map_reduce_tags())
+    
 
 @app.route('/questions/unanswered/')
 def unanswered_questions():

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>{{ title }}</h2>
+<ul>
+{% for tag in tags %}
+    <li>
+        <a class="post-tag" href="#">{{ tag['_id'] }}</a> <b>x {{ tag['value']|int }}</b>
+{% endfor %}
+</ul>
+{% endblock %}
