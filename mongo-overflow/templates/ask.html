@@ -2,15 +2,25 @@
 
 {% block content %}
 <div style="float:left; width: 100%;">
-<h2> {{ title }} </h2>
 {% from "_formhelpers.html" import render_field %}
 <form method="POST" action=".">
-  <dl>
-    {{ render_field(form.title) }}
-    {{ render_field(form.body) }}
-    {{ render_field(form.tags) }}
+    <dl>
+        <h2>What's your question? Be specific!</h2>
+        <input type="text" value="" name="title" id="title" 
+        style="width:100%; font-size:150%;">
+        <textarea id="body" name="body" class="question_body"></textarea>
+        <h4>Tags</h4>
+        <input type="text" value="" name="tags" id="tags" 
+        style="width:30%; font-size:150%;">
+
   </dl>
-  <p><input type=submit value="Post Question">
+<div class="form-submit"><input type=submit value="Post Question"></div>
 </form>
 </div>
+<script type="text/javascript">
+    $().ready(function() {
+        $("#body").wmd(); 
+    });
+</script>
+
 {% endblock %}

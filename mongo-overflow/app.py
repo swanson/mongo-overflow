@@ -1,5 +1,6 @@
 from flask import Flask, g, session, request, render_template, flash, redirect, url_for, jsonify
 from flaskext.openid import OpenID
+from flaskext.markdown import Markdown
 from db.documents import User, Question, Answer, Comment, Vote, AnswerVote, map_reduce_tags
 from db.forms import QuestionForm, AnswerForm, CommentForm
 from mongoengine import *
@@ -11,6 +12,7 @@ app = Flask(__name__)
 app.debug = True
 app.secret_key = 'very_secret_key'
 oid = OpenID(app)
+Markdown(app)
 
 @app.template_filter()
 def timesince(dt, default="just now"):
@@ -81,6 +83,7 @@ def question_details(id):
 def ask_question():
     form = QuestionForm(request.form)
     if request.method == 'POST' and form.validate() and g.user:
+        print form
         title = form.title.data
         body = form.body.data
         tags = form.tags.data

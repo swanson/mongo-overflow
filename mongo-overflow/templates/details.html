@@ -101,7 +101,7 @@
     <div class='question-div'>
         <div class='question-body'>
             <h2>{{ question.title }}</h2>
-            {{ question.body }} <br />
+            {{ question.body|markdown }} <br />
             {% if question.tags %}
                 <div class="tags">
                 {% for tag in question.tags %}
@@ -151,7 +151,7 @@
 
     <div class='answer-content'>
             <div class='answer-body'>
-                {{ answer.body }} <br />
+                {{ answer.body|markdown }} <br />
             </div>
             <div class="posted-by">
                 {{ answer.author.get_gravatar()|safe }} <br/>
@@ -195,4 +195,10 @@
 </div>
 
 </div>
+<script type="text/javascript">
+    $().ready(function() {
+        $("#answer_body").wmd(); 
+    });
+</script>
+
 {% endblock %}
