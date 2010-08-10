@@ -83,7 +83,6 @@ def question_details(id):
 def ask_question():
     form = QuestionForm(request.form)
     if request.method == 'POST' and form.validate() and g.user:
-        print form
         title = form.title.data
         body = form.body.data
         tags = form.tags.data
@@ -95,7 +94,7 @@ def ask_question():
                     author = g.user,
                     tags = tags)
         new_question.save()
-        return redirect('/questions/%s' % new_question.id)
+        return redirect('/questions/%s/' % new_question.id)
     elif not g.user:
         flash("Please login")
     elif request.method == 'POST':
@@ -137,24 +136,25 @@ def add_comment_to_question(id):
         new_comment.save()
         question.comments.append(new_comment)
         question.save()
-        return redirect('/questions/%s' % id) #avoid double POSTs
+        return redirect('/questions/%s/' % id) #avoid double POSTs
     else:
         #add error handling
-        return redirect('/questions/%s' % id) #avoid double POSTs
+        return redirect('/questions/%s/' % id) #avoid double POSTs
 
 @app.route('/posts/question/<id>/answer/', methods = ['POST'])
 def add_answer_to_question(id):
     answer_form = AnswerForm(request.form)
+    print answer_form.answer_body.data
     if g.user and answer_form.validate():
         question = Question.objects.get(id = id)
         new_answer = Answer(body = answer_form.answer_body.data, author = g.user)
         new_answer.save()
         question.answers.append(new_answer)
         question.save()
-        return redirect('/questions/%s' % id) #avoid double POSTs
+        return redirect('/questions/%s/' % id) #avoid double POSTs
     else:
         #add error handling
-        return redirect('/questions/%s' % id) #avoid double POSTs
+        return redirect('/questions/%s/' % id) #avoid double POSTs
 
 @app.route('/posts/question/<id>/answer/<answer_id>/comment/', methods = ['POST'])
 def add_comment_to_answer(id, answer_id):
@@ -165,10 +165,10 @@ def add_comment_to_answer(id, answer_id):
         new_comment.save()
         answer.comments.append(new_comment)
         answer.save()
-        return redirect('/questions/%s' % id) #avoid double POSTs
+        return redirect('/questions/%s/' % id) #avoid double POSTs
     else:
         #add error handling
-        return redirect('/questions/%s' % id) #avoid double POSTs
+        return redirect('/questions/%s/' % id) #avoid double POSTs
 
 
 @app.route('/posts/question/<id>/vote/<int:value>/', methods = ['POST'])

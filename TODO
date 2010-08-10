@@ -1,0 +1,4 @@
+-better error handling when not logged in/forms are not valid
+-move ALL styles to .css
+-improve HTML structure for comments on answers
+-add questions/total votes/tags to user profile
